@@ -26,13 +26,15 @@ const CreateOrderFormBase = props => {
       if (!errors) {
         console.log("received values", values);
         const { date } = values;
-        const orderAt = date[0].format("YYYY MM DD");
-        const arrivalAt = date[1].format("YYYY MM DD");
+        const orderAt = date[0].format("YYYY-MM-DD");
+        const arrivalAt = date[1].format("YYYY-MM-DD");
         const order = {
           ...values,
           date: { orderAt, arrivalAt },
           nameplate: false,
-          certificate: false
+          certificate: false,
+          pressure: '1.0',
+          timestamp: firebase.serverTimestamp()
         };
         // api
         firebase.createOrder(order);
@@ -69,7 +71,7 @@ const CreateOrderFormBase = props => {
                 message: "销售客户不能为空白字符"
               }
             ]
-          })(<Input placeholder="销售客户" />)}
+          })(<Input placeholder="销售客户" autoFocus allowClear />)}
         </Form.Item>
         <Form.Item>
           {getFieldDecorator("product", {
@@ -83,7 +85,7 @@ const CreateOrderFormBase = props => {
                 message: "产品型号不能为空白字符"
               }
             ]
-          })(<Input placeholder="产品型号" />)}
+          })(<Input placeholder="产品型号" allowClear />)}
         </Form.Item>
         <Form.Item label="数量">
           {getFieldDecorator("quantity", {

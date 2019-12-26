@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Spin } from "antd";
 import firebase from "../../components/firebase";
 import CreateOrderForm from "./createOrderForm";
 import OrderTable from "./orderTable";
@@ -30,7 +31,6 @@ const WorkPage = props => {
 
   return (
     <div>
-      <h1>work page</h1>
       <CreateOrderForm />
       <ul>
         {orders ? (
@@ -41,7 +41,7 @@ const WorkPage = props => {
             onToggleCertificatePrint={toggleCertificatePrint}
           />
         ) : (
-          "No data yet"
+          <Spin />
         )}
       </ul>
     </div>

@@ -57,8 +57,16 @@ class LoginForm extends React.Component {
       isFieldTouched("password") && getFieldError("password");
     return email ? (
       <span>
-        {email}
-        <Button onClick={this.signOut}>Sign out</Button>
+        <Icon type="user" />
+        {email}{" "}
+        <Button
+          type="primary"
+          shape="round"
+          size="small"
+          onClick={this.signOut}
+        >
+          Sign out
+        </Button>
       </span>
     ) : (
       <Form layout="inline" onSubmit={this.handleSubmit}>

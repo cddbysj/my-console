@@ -1,13 +1,16 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Layout, Menu, Icon, Button } from "antd";
+import { Layout, Menu, Icon } from "antd";
 import "./App.css";
 import LoginForm from "./components/signIn";
 import WorkPage from "./pages/work";
+import JrqProduct from "./pages/work/jrq";
+import WkProduct from "./pages/work/wk";
 import MyPage from "./pages/my";
 import FamilyPage from "./pages/family";
+import NameplatePage from "./pages/work/nameplate";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
 
 function App() {
@@ -23,7 +26,11 @@ function App() {
           }}
         >
           <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
+          <Menu
+            theme="dark"
+            mode="inline"
+            defaultSelectedKeys={["order-table"]}
+          >
             <SubMenu
               key="work"
               title={
@@ -33,14 +40,24 @@ function App() {
                 </Link>
               }
             >
-              <Menu.ItemGroup key="order" title="订单管理">
-                <Menu.Item key="order-table">订单列表</Menu.Item>
-                <Menu.Item key="create-order">新建订单</Menu.Item>
-              </Menu.ItemGroup>
-              <Menu.ItemGroup key="product" title="产品文档">
-                <Menu.Item key="jrq">加热器</Menu.Item>
-                <Menu.Item key="wk">温控</Menu.Item>
-              </Menu.ItemGroup>
+              <Menu.Item key="order-table">
+                <Link to="/work/orders">
+                  <Icon type="table" />
+                  订单
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="jrq">
+                <Link to="/work/jrq">
+                  <Icon type="file" />
+                  加热器
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="wk">
+                <Link to="/work/wk">
+                  <Icon type="file" />
+                  温控
+                </Link>
+              </Menu.Item>
             </SubMenu>
             <Menu.Item key="my">
               <Link to="/my">
@@ -56,16 +73,25 @@ function App() {
           </Menu>
         </Sider>
         <Layout style={{ marginLeft: 200 }}>
-          <Header style={{ background: "#fff", padding: 0 }}>
+          <Header
+            style={{ background: "#fff", padding: "0 10px", margin: "0 10px" }}
+          >
             <LoginForm />
           </Header>
-          <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
-            <div
-              style={{ padding: 24, background: "#fff" }}
-            >
+          <Content style={{ margin: "10px 10px 0", overflow: "initial" }}>
+            <div style={{ padding: 24, background: "#fff" }}>
               <Switch>
-                <Route path="/work">
+                <Route path="/work" exact>
                   <WorkPage />
+                </Route>
+                <Route path="/work/orders" exact>
+                  <WorkPage />
+                </Route>
+                <Route path="/work/jrq" exact>
+                  <JrqProduct />
+                </Route>
+                <Route path="/work/wk" exact>
+                  <WkProduct />
                 </Route>
                 <Route path="/my">
                   <MyPage />
@@ -73,15 +99,13 @@ function App() {
                 <Route path="/family">
                   <FamilyPage />
                 </Route>
+                <Route path="/nameplate/:id" children={<NameplatePage />} />
                 <Route path="/">
                   <WorkPage />
                 </Route>
               </Switch>
             </div>
           </Content>
-          <Footer style={{ textAlign: "center" }}>
-            Ant Design ©2018 Created by Ant UED
-          </Footer>
         </Layout>
       </Layout>
     </Router>

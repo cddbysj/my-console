@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Table, Divider, Button, Switch, Icon } from "antd";
+import { Link } from "react-router-dom";
+import { Table, Divider, Button, Switch, Icon, Typography } from "antd";
 import CreateOrderForm from "./createOrderForm";
 
 const { Column } = Table;
+const { Text } = Typography;
 
 const OrderTable = props => {
   const [visible, setVisible] = useState(false);
@@ -36,9 +38,30 @@ const OrderTable = props => {
         onCancel={handleCancel}
         onCreate={handleCreate}
       />
-      <Table dataSource={orders} rowKey={record => record.id}>
-        <Column title="产品" dataIndex="product" key="product" />
-        <Column title="销售客户" dataIndex="consumer" key="consumer" />
+      <Table
+        dataSource={orders}
+        rowKey={record => record.id}
+        pagination={{ position: "top" }}
+        size="middle"
+      >
+        <Column
+          title="产品"
+          dataIndex="product"
+          key="product"
+          render={(text, record) => (
+            <Text copyable>
+              <Link to={{ pathname: `/nameplate/${record.id}`, state: record }}>
+                {text}
+              </Link>
+            </Text>
+          )}
+        />
+        <Column
+          title="销售客户"
+          dataIndex="consumer"
+          key="consumer"
+          render={text => <Text copyable>{text}</Text>}
+        />
         <Column title="数量" dataIndex="quantity" key="quantity" />
         <Column
           title="采购日期"
@@ -52,6 +75,11 @@ const OrderTable = props => {
           title="铭牌"
           dataIndex="nameplate"
           key="nameplate"
+          filters={[
+            { text: "已打印", value: true },
+            { text: "未打印", value: false }
+          ]}
+          onFilter={(value, record) => record.nameplate === value}
           render={(text, record) => (
             <Switch
               checked={record.nameplate}
@@ -66,6 +94,11 @@ const OrderTable = props => {
           title="合格证"
           dataIndex="certificate"
           key="certificate"
+          filters={[
+            { text: "已打印", value: true },
+            { text: "未打印", value: false }
+          ]}
+          onFilter={(value, record) => record.certificate === value}
           render={(text, record) => (
             <Switch
               checked={record.certificate}
@@ -82,12 +115,12 @@ const OrderTable = props => {
           render={(text, record) => (
             <span>
               <Button
-                shape="round"
+                type="link"
                 icon="delete"
                 onClick={() => onRemoveOrder(record.id)}
               />
               <Divider type="vertical" />
-              <Button shape="round" icon="edit" />
+              <Button type="link" icon="edit" />
             </span>
           )}
         />

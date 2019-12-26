@@ -23,6 +23,9 @@ class Firebase {
     this.db = firebase.firestore();
   }
 
+  // ** Helper ** //
+  serverTimestamp = () => firebase.firestore.FieldValue.serverTimestamp();
+
   // ** Auth ** //
   createUserWithEmailAndPassword = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
@@ -33,7 +36,11 @@ class Firebase {
   signOut = () => this.auth.signOut();
 
   // ** Orders API ** //
-  orders = () => this.db.collection("orders");
+  orders = () =>
+    this.db
+      .collection("orders")
+      .orderBy("timestamp", "desc")
+      .limit(100);
 
   createOrder = async order => await this.db.collection("orders").add(order);
 
