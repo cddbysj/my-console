@@ -10,6 +10,30 @@ import {
 } from "antd";
 import firebase from "../../components/firebase";
 
+// 喉部水流速度参考值 单位 m/s
+const VELOCITY = 9.12;
+// 蒸汽热焓值参考值 单位 KCal/kg
+const STEAM_ENTHALPY = 656.93;
+// QSH-48 对应的斜孔数量
+const STANDARD_HOLES_COUNT = 720;
+// QSH-48 对应的蒸汽流量 单位 kg/h
+const STANDARD_STEAM_FLOW = 16724.99;
+
+// 计算喉部直径
+const computeThroatDiameter = flow =>
+  Math.ceil(2 * Math.sqrt((1000000 * flow) / 3600 / VELOCITY / Math.PI));
+
+// 计算斜孔数量
+const computeHolesCount = (flow, heatFrom, heatTo) => {
+  const heatIn = flow * 1000 * (heatTo - heatFrom); // 吸收热量
+  const result =
+    (STANDARD_HOLES_COUNT * heatIn) /
+    (STEAM_ENTHALPY - heatTo) /
+    STANDARD_STEAM_FLOW;
+
+  return Math.ceil(result);
+};
+
 const { RangePicker } = DatePicker;
 
 const CreateOrderFormBase = props => {
@@ -25,17 +49,28 @@ const CreateOrderFormBase = props => {
     validateFieldsAndScroll((errors, values) => {
       if (!errors) {
         console.log("received values", values);
-        const { date } = values;
+        const { date, flow, heatFrom, heatTo } = values;
+        // 下单日期
         const orderAt = date[0].format("YYYY-MM-DD");
+        // 到货日期
         const arrivalAt = date[1].format("YYYY-MM-DD");
+        // 喉部直径由流量推算出
+        const throatDiameter = computeThroatDiameter(flow);
+        // 斜孔数量由流量和温差共同推算出
+        const holesCount = computeHolesCount(flow, heatFrom, heatTo);
         const order = {
           ...values,
           date: { orderAt, arrivalAt },
           nameplate: false,
           certificate: false,
-          pressure: '1.0',
-          timestamp: firebase.serverTimestamp()
+          pressure: "1.0",
+          timestamp: firebase.serverTimestamp(),
+          throatDiameter,
+          heatFrom,
+          heatTo,
+          holesCount
         };
+        console.table("订单信息：", order);
         // api
         firebase.createOrder(order);
       }
@@ -123,6 +158,28 @@ const CreateOrderFormBase = props => {
               {
                 required: true,
                 message: "请输入有效的水流量"
+              }
+            ]
+          })(<InputNumber />)}
+        </Form.Item>
+        <Form.Item label="进水温度 °C">
+          {getFieldDecorator("heatFrom", {
+            initialValue: 5,
+            rules: [
+              {
+                required: true,
+                message: "请输入进水温度"
+              }
+            ]
+          })(<InputNumber />)}
+        </Form.Item>
+        <Form.Item label="出水温度 °C">
+          {getFieldDecorator("heatTo", {
+            initialValue: 65,
+            rules: [
+              {
+                required: true,
+                message: "请输入出水温度"
               }
             ]
           })(<InputNumber />)}

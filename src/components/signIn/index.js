@@ -1,118 +1,105 @@
 import React from "react";
-import { Form, Icon, Input, Button, message } from "antd";
+import { Form, Icon, Input, Button, message, Avatar } from "antd";
 import firebase from "../firebase";
+import useAuth from "../../hooks/useAuth";
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 
-class LoginForm extends React.Component {
-  state = {
-    email: null
-  };
+const LoginForm = props => {
+  const user = useAuth();
+  const email = user && user.email;
 
-  componentDidMount() {
-    // To disabled submit button at the beginning.
-    this.props.form.validateFields();
-
-    firebase.auth.onAuthStateChanged(user => {
-      if (user) {
-        this.setState({ email: user.email });
-      }
-    });
-  }
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => {
+    props.form.validateFields((err, values) => {
       if (!err) {
         console.log("Received values of form: ", values);
         const { email, password } = values;
         firebase
           .signInWithEmailAndPassword(email, password)
           .then(result => {
-            message.success("欢迎");
+            message.success("欢迎", 1);
           })
           .catch(error => message.error(error.message));
       }
     });
   };
 
-  signOut = () => {
+  const signOut = () => {
     firebase.signOut();
   };
 
-  render() {
-    const { email } = this.state;
-    const {
-      getFieldDecorator,
-      getFieldsError,
-      getFieldError,
-      isFieldTouched
-    } = this.props.form;
+  const {
+    getFieldDecorator,
+    getFieldsError,
+    getFieldError,
+    isFieldTouched
+  } = props.form;
 
-    // Only show error after a field is touched.
-    const emailError = isFieldTouched("email") && getFieldError("email");
-    const passwordError =
-      isFieldTouched("password") && getFieldError("password");
-    return email ? (
-      <span>
-        <Icon type="user" />
-        {email}{" "}
+  // Only show error after a field is touched.
+  const emailError = isFieldTouched("email") && getFieldError("email");
+  const passwordError = isFieldTouched("password") && getFieldError("password");
+
+  return email ? (
+    <div style={{ display: "flex", alignItems: "center" }}>
+      <Avatar
+        style={{
+          color: "#f56a00",
+          backgroundColor: "#fde3cf"
+        }}
+      >
+        Bill
+      </Avatar>
+      <Button style={{ marginLeft: 20 }} size="small" onClick={signOut}>
+        登出
+      </Button>
+    </div>
+  ) : (
+    <Form layout="inline" onSubmit={handleSubmit}>
+      <Form.Item
+        validateStatus={emailError ? "error" : ""}
+        help={emailError || ""}
+      >
+        {getFieldDecorator("email", {
+          rules: [
+            { type: "email", message: "无效的电子邮箱" },
+            { required: true, message: "请输入你的电子邮箱" }
+          ]
+        })(
+          <Input
+            prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
+            placeholder="电子邮件"
+          />
+        )}
+      </Form.Item>
+      <Form.Item
+        validateStatus={passwordError ? "error" : ""}
+        help={passwordError || ""}
+      >
+        {getFieldDecorator("password", {
+          rules: [{ required: true, message: "Please input your Password!" }]
+        })(
+          <Input
+            prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+            type="password"
+            placeholder="密码"
+          />
+        )}
+      </Form.Item>
+      <Form.Item>
         <Button
           type="primary"
-          shape="round"
-          size="small"
-          onClick={this.signOut}
+          htmlType="submit"
+          disabled={hasErrors(getFieldsError())}
         >
-          Sign out
+          登录
         </Button>
-      </span>
-    ) : (
-      <Form layout="inline" onSubmit={this.handleSubmit}>
-        <Form.Item
-          validateStatus={emailError ? "error" : ""}
-          help={emailError || ""}
-        >
-          {getFieldDecorator("email", {
-            rules: [
-              { type: "email", message: "The input is not valid E-mail!" },
-              { required: true, message: "Please input your email!" }
-            ]
-          })(
-            <Input
-              prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
-              placeholder="email"
-            />
-          )}
-        </Form.Item>
-        <Form.Item
-          validateStatus={passwordError ? "error" : ""}
-          help={passwordError || ""}
-        >
-          {getFieldDecorator("password", {
-            rules: [{ required: true, message: "Please input your Password!" }]
-          })(
-            <Input
-              prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-              type="password"
-              placeholder="Password"
-            />
-          )}
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            disabled={hasErrors(getFieldsError())}
-          >
-            Log in
-          </Button>
-        </Form.Item>
-      </Form>
-    );
-  }
-}
+      </Form.Item>
+    </Form>
+  );
+};
 
 const WrappedLoginForm = Form.create({ name: "login" })(LoginForm);
 

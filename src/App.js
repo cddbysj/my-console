@@ -1,11 +1,14 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Layout, Menu, Icon } from "antd";
+import { Layout, Menu, Icon, Result } from "antd";
 import "./App.css";
+import useAuth from "./hooks/useAuth";
+
 import LoginForm from "./components/signIn";
-import WorkPage from "./pages/work";
+import WorkFlowPage from "./pages/work/flow";
 import JrqProduct from "./pages/work/jrq";
 import WkProduct from "./pages/work/wk";
+import WorkPage from "./pages/work";
 import MyPage from "./pages/my";
 import FamilyPage from "./pages/family";
 import NameplatePage from "./pages/work/nameplate";
@@ -14,6 +17,8 @@ const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
 
 function App() {
+  const auth = useAuth();
+
   return (
     <Router>
       <Layout>
@@ -40,6 +45,12 @@ function App() {
                 </Link>
               }
             >
+              <Menu.Item key="work-flow">
+                <Link to="/work/flow">
+                  <Icon type="table" />
+                  工作流
+                </Link>
+              </Menu.Item>
               <Menu.Item key="order-table">
                 <Link to="/work/orders">
                   <Icon type="table" />
@@ -74,36 +85,60 @@ function App() {
         </Sider>
         <Layout style={{ marginLeft: 200 }}>
           <Header
-            style={{ background: "#fff", padding: "0 10px", margin: "0 10px" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              background: "#fff",
+              padding: "0 10px",
+              margin: "0 10px"
+            }}
           >
             <LoginForm />
           </Header>
           <Content style={{ margin: "10px 10px 0", overflow: "initial" }}>
             <div style={{ padding: 24, background: "#fff" }}>
-              <Switch>
-                <Route path="/work" exact>
-                  <WorkPage />
-                </Route>
-                <Route path="/work/orders" exact>
-                  <WorkPage />
-                </Route>
-                <Route path="/work/jrq" exact>
-                  <JrqProduct />
-                </Route>
-                <Route path="/work/wk" exact>
-                  <WkProduct />
-                </Route>
-                <Route path="/my">
-                  <MyPage />
-                </Route>
-                <Route path="/family">
-                  <FamilyPage />
-                </Route>
-                <Route path="/nameplate/:id" children={<NameplatePage />} />
-                <Route path="/">
-                  <WorkPage />
-                </Route>
-              </Switch>
+              {auth ? (
+                <Switch>
+                  <Route path="/work/flow" exact>
+                    <WorkFlowPage />
+                  </Route>
+                  <Route path="/work/orders" exact>
+                    <WorkPage />
+                  </Route>
+                  <Route path="/work/jrq" exact>
+                    <JrqProduct />
+                  </Route>
+                  <Route path="/work/wk" exact>
+                    <WkProduct />
+                    <Route path="/work" exact>
+                      <WorkPage />
+                    </Route>
+                  </Route>
+                  <Route path="/my">
+                    <MyPage />
+                  </Route>
+                  <Route path="/family">
+                    <FamilyPage />
+                  </Route>
+                  <Route path="/nameplate/:id" children={<NameplatePage />} />
+                  <Route path="/" exact>
+                    <WorkPage />
+                  </Route>
+                  <Route path="*">
+                    <Result
+                      status="404"
+                      title="404"
+                      subTitle="抱歉，您访问的页面不存在"
+                    />
+                  </Route>
+                </Switch>
+              ) : (
+                <Result
+                  status="403"
+                  title="403"
+                  subTitle="抱歉，您没有权限访问该页面"
+                />
+              )}
             </div>
           </Content>
         </Layout>

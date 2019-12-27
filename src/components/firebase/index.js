@@ -35,6 +35,9 @@ class Firebase {
 
   signOut = () => this.auth.signOut();
 
+  onAuthStateChanged = (next, fallback) =>
+    this.auth.onAuthStateChanged(user => (user ? next(user) : fallback()));
+
   // ** Orders API ** //
   orders = () =>
     this.db
