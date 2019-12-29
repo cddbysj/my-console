@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Table, Divider, Button, Switch, Icon, Typography } from "antd";
-import CreateOrderForm from "./createOrderForm";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Table, Divider, Button, Switch, Icon, Typography } from 'antd';
+import CreateOrderForm from './createOrderForm';
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -13,7 +13,7 @@ const OrderTable = props => {
     orders,
     onRemoveOrder,
     onToggleNameplatePrint,
-    onToggleCertificatePrint
+    onToggleCertificatePrint,
   } = props;
 
   const showModal = () => {
@@ -41,7 +41,7 @@ const OrderTable = props => {
       <Table
         dataSource={orders}
         rowKey={record => record.id}
-        pagination={{ position: "top" }}
+        pagination={{ position: 'top' }}
         size="middle"
       >
         <Column
@@ -50,7 +50,7 @@ const OrderTable = props => {
           key="product"
           render={(text, record) => (
             <Text copyable>
-              <Link to={{ pathname: `/nameplate/${record.id}`, state: record }}>
+              <Link to={{ pathname: `/product/${record.id}`, state: record }}>
                 {text}
               </Link>
             </Text>
@@ -76,8 +76,8 @@ const OrderTable = props => {
           dataIndex="nameplate"
           key="nameplate"
           filters={[
-            { text: "已打印", value: true },
-            { text: "未打印", value: false }
+            { text: '已打印', value: true },
+            { text: '未打印', value: false },
           ]}
           onFilter={(value, record) => record.nameplate === value}
           render={(text, record) => (
@@ -95,8 +95,8 @@ const OrderTable = props => {
           dataIndex="certificate"
           key="certificate"
           filters={[
-            { text: "已打印", value: true },
-            { text: "未打印", value: false }
+            { text: '已打印', value: true },
+            { text: '未打印', value: false },
           ]}
           onFilter={(value, record) => record.certificate === value}
           render={(text, record) => (
@@ -121,6 +121,8 @@ const OrderTable = props => {
               />
               <Divider type="vertical" />
               <Button type="link" icon="edit" />
+              <Divider type="vertical" />
+              <Button type="link" icon="copy" />
             </span>
           )}
         />

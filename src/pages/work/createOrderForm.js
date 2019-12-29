@@ -1,17 +1,18 @@
-import React from "react";
+import React from 'react';
 import {
   Button,
   Form,
   Input,
   InputNumber,
+  Select,
   Radio,
   DatePicker,
-  Modal
-} from "antd";
-import firebase from "../../components/firebase";
+  Modal,
+} from 'antd';
+import firebase from '../../components/firebase';
 
 // 喉部水流速度参考值 单位 m/s
-const VELOCITY = 9.12;
+const VELOCITY = 9.1229;
 // 蒸汽热焓值参考值 单位 KCal/kg
 const STEAM_ENTHALPY = 656.93;
 // QSH-48 对应的斜孔数量
@@ -41,19 +42,19 @@ const CreateOrderFormBase = props => {
     form: { getFieldDecorator, validateFieldsAndScroll },
     visible,
     onCancel,
-    onCreate
+    onCreate,
   } = props;
 
   const onSubmit = e => {
     e.preventDefault();
     validateFieldsAndScroll((errors, values) => {
       if (!errors) {
-        console.log("received values", values);
+        console.log('received values', values);
         const { date, flow, heatFrom, heatTo } = values;
         // 下单日期
-        const orderAt = date[0].format("YYYY-MM-DD");
+        const orderAt = date[0].format('YYYY-MM-DD');
         // 到货日期
-        const arrivalAt = date[1].format("YYYY-MM-DD");
+        const arrivalAt = date[1].format('YYYY-MM-DD');
         // 喉部直径由流量推算出
         const throatDiameter = computeThroatDiameter(flow);
         // 斜孔数量由流量和温差共同推算出
@@ -63,14 +64,14 @@ const CreateOrderFormBase = props => {
           date: { orderAt, arrivalAt },
           nameplate: false,
           certificate: false,
-          pressure: "1.0",
+          pressure: '1.0',
           timestamp: firebase.serverTimestamp(),
           throatDiameter,
           heatFrom,
           heatTo,
-          holesCount
+          holesCount,
         };
-        console.table("订单信息：", order);
+        console.table('订单信息：', order);
         // api
         firebase.createOrder(order);
       }
@@ -78,13 +79,18 @@ const CreateOrderFormBase = props => {
   };
 
   const formItemLayout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 }
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 6 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 18 },
+    },
   };
 
   return (
     <Modal
-      {...formItemLayout}
       style={{ top: 10 }}
       visible={visible}
       title="新建订单"
@@ -93,105 +99,122 @@ const CreateOrderFormBase = props => {
       onCancel={onCancel}
       onOk={onCreate}
     >
-      <Form onSubmit={onSubmit}>
-        <Form.Item>
-          {getFieldDecorator("consumer", {
+      <Form onSubmit={onSubmit} {...formItemLayout}>
+        <Form.Item label="销售客户">
+          {getFieldDecorator('consumer', {
             rules: [
               {
                 required: true,
-                message: "请输入销售客户"
+                message: '请输入销售客户',
               },
               {
                 whitespace: true,
-                message: "销售客户不能为空白字符"
-              }
-            ]
-          })(<Input placeholder="销售客户" autoFocus allowClear />)}
+                message: '销售客户不能为空白字符',
+              },
+            ],
+          })(<Input autoFocus allowClear />)}
         </Form.Item>
-        <Form.Item>
-          {getFieldDecorator("product", {
+        <Form.Item label="产品型号">
+          {getFieldDecorator('product', {
             rules: [
               {
                 required: true,
-                message: "请输入产品型号"
+                message: '请输入产品型号',
               },
               {
                 whitespace: true,
-                message: "产品型号不能为空白字符"
-              }
-            ]
-          })(<Input placeholder="产品型号" allowClear />)}
+                message: '产品型号不能为空白字符',
+              },
+            ],
+          })(<Input allowClear />)}
         </Form.Item>
         <Form.Item label="数量">
-          {getFieldDecorator("quantity", {
+          {getFieldDecorator('quantity', {
             rules: [
               {
                 required: true,
-                message: "请输入产品数量"
-              }
+                message: '请输入产品数量',
+              },
             ],
-            initialValue: 1
+            initialValue: 1,
           })(<InputNumber />)}
         </Form.Item>
         <Form.Item label="重量 kg">
-          {getFieldDecorator("weight", {
+          {getFieldDecorator('weight', {
             rules: [
               {
                 required: true,
-                message: "请输入重量"
-              }
+                message: '请输入重量',
+              },
             ],
-            initialValue: 50
+            initialValue: 50,
           })(
             <Radio.Group>
-              <Radio value={8}>{8}</Radio>
-              <Radio value={15}>{15}</Radio>
-              <Radio value={50}>{50}</Radio>
-              <Radio value={200}>{200}</Radio>
+              <Radio.Button value={8}>{8}</Radio.Button>
+              <Radio.Button value={15}>{15}</Radio.Button>
+              <Radio.Button value={50}>{50}</Radio.Button>
+              <Radio.Button value={200}>{200}</Radio.Button>
             </Radio.Group>
           )}
         </Form.Item>
         <Form.Item label="流量 t/h">
-          {getFieldDecorator("flow", {
+          {getFieldDecorator('flow', {
             initialValue: 20,
             rules: [
               {
                 required: true,
-                message: "请输入有效的水流量"
-              }
-            ]
+                message: '请输入有效的水流量',
+              },
+            ],
           })(<InputNumber />)}
         </Form.Item>
         <Form.Item label="进水温度 °C">
-          {getFieldDecorator("heatFrom", {
+          {getFieldDecorator('heatFrom', {
             initialValue: 5,
             rules: [
               {
                 required: true,
-                message: "请输入进水温度"
-              }
-            ]
+                message: '请输入进水温度',
+              },
+            ],
           })(<InputNumber />)}
         </Form.Item>
         <Form.Item label="出水温度 °C">
-          {getFieldDecorator("heatTo", {
+          {getFieldDecorator('heatTo', {
             initialValue: 65,
             rules: [
               {
                 required: true,
-                message: "请输入出水温度"
-              }
-            ]
+                message: '请输入出水温度',
+              },
+            ],
           })(<InputNumber />)}
         </Form.Item>
+        <Form.Item label="法兰标准">
+          {getFieldDecorator('flangeStandard', {
+            initialValue: 'GB/T 9119-2000',
+          })(
+            <Select>
+              <Select.Option value="GB/T 9119-2000">
+                GB/T 9119-2000
+              </Select.Option>
+              <Select.Option value="HG/T 20592-2009">
+                HG/T 20592-2009
+              </Select.Option>
+              <Select.Option value="HG/T 20615-2009">
+                HG/T 20615-2009
+              </Select.Option>
+            </Select>
+          )}
+        </Form.Item>
         <Form.Item label="货期">
-          {getFieldDecorator("date", {
+          {getFieldDecorator('date', {
             rules: [
               {
                 required: true,
-                message: "请输入货期"
-              }
-            ]
+                message: '请输入货期',
+              },
+            ],
           })(<RangePicker />)}
         </Form.Item>
         <Form.Item wrapperCol={{ span: 12, offset: 6 }}>
@@ -204,7 +227,7 @@ const CreateOrderFormBase = props => {
   );
 };
 
-const CreateOrderForm = Form.create({ name: "create_order" })(
+const CreateOrderForm = Form.create({ name: 'create_order' })(
   CreateOrderFormBase
 );
 
