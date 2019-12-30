@@ -62,7 +62,7 @@ const ProductPage = () => {
   // 产品单价
   const price = matrix[materialSymbol][dn];
 
-  const contractText = `法兰标准：${flangeStandard}。材质碳钢，进水侧口径${dnInlet}，出水侧口径${dnOutlet}，及蒸汽侧口径${dnSteam}，喉径${throatDiameter}mm，斜孔数${holesCount}，斜孔直径3.5mm，角度与水平线成30℃。`;
+  const contractText = `法兰标准：${flangeStandard}。材质碳钢，进水侧口径${dnInlet}，出水侧口径${dnOutlet}，蒸汽侧口径${dnSteam}，喉径${throatDiameter}mm，斜孔数${holesCount}，斜孔直径3.5mm，角度与水平线成30℃。`;
 
   return (
     <div>
@@ -97,7 +97,7 @@ const ProductPage = () => {
           {flangeStandard}
         </Descriptions.Item>
         <Descriptions.Item label="合同纯文本">
-          <Text copyable={{ text: contractText }}>复制</Text>
+          <Text copyable={{ text: contractText }}>{contractText}</Text>
         </Descriptions.Item>
       </Descriptions>
     </div>

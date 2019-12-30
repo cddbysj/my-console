@@ -5,13 +5,10 @@ import HqsPriceTable from './hqsPriceTable';
 import HjPriceTable from './hjPriceTable';
 import HeatComputer from './heatComputer';
 import HqsProduct from './hqsProduct';
+import HjProduct from './hjProduct';
 import TechInfo from './techInfo';
 
 const { TabPane } = Tabs;
-
-const HjProduct = () => {
-  return <h2>浸没式加热器</h2>;
-};
 
 const JrqProduct = () => (
   <Tabs defaultActiveKey="1">
