@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Steps, Button, message } from "antd";
 
 import Params from "./params";
+import ContractPanel from "./contractPanel";
 
 const { Step } = Steps;
 
@@ -13,15 +14,35 @@ const steps = [
   },
   {
     title: "制作采购合同",
-    content: <div>制作采购合同</div>
+    content: <ContractPanel />
   },
   {
     title: "发送采购合同",
-    content: <div>发送采购合同</div>
+    content: (
+      <div>
+        <a
+          href="https://mail.qq.com/cgi-bin/frame_html?sid=2tq_5c2Dt8fOMkEf&r=ba4f18e27a212e38f7e5be5b900066ce"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          QQ mail
+        </a>
+      </div>
+    )
   },
   {
     title: "在 CRM 下单",
-    content: <div>下单</div>
+    content: (
+      <div>
+        <a
+          href="https://crm.xtcrm.com/lib/purchase/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          XTools CRM
+        </a>
+      </div>
+    )
   },
   {
     title: "铭牌打印",
@@ -32,16 +53,9 @@ const steps = [
 const WorkFlowPage = props => {
   const [current, setCurrent] = useState(0);
 
-  const next = () => {
-    setCurrent(prev => prev + 1);
-  };
-  const prev = () => {
-    setCurrent(prev => prev - 1);
-  };
-
   return (
     <div>
-      <Steps current={current} size="small">
+      <Steps current={current} onChange={current => setCurrent(current)}>
         {steps.map(step => (
           <Step key={step.title} title={step.title} />
         ))}
@@ -56,23 +70,6 @@ const WorkFlowPage = props => {
         }}
       >
         {steps[current].content}
-      </div>
-      <div>
-        {current < steps.length - 1 && (
-          <Button type="primary" onClick={next}>
-            下一步
-          </Button>
-        )}
-        {current === steps.length - 1 && (
-          <Button type="primary" onClick={() => message.success("流程结束", 1)}>
-            完成
-          </Button>
-        )}
-        {current > 0 && (
-          <Button style={{ marginLeft: 8 }} onClick={prev}>
-            上一步
-          </Button>
-        )}
       </div>
     </div>
   );
