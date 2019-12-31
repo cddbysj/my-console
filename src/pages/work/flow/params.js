@@ -1,7 +1,7 @@
 // ** 产品参数确认 ** //
 import React, { useState } from "react";
 import { Button } from "antd";
-import CreateOrderForm from "../createOrderForm";
+import CreateOrderForm from "pages/work/order/createOrderForm";
 
 const Params = props => {
   const [visible, setVisible] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Spin } from "antd";
-import firebase from "../../components/firebase";
+import firebase from "components/firebase";
 import CreateOrderForm from "./createOrderForm";
 import OrderTable from "./orderTable";
 

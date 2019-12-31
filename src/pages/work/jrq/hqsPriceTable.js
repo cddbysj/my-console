@@ -25,7 +25,7 @@ const hqsData = [
   {
     key: 'hqs2',
     dn: 125,
-    carbonSteel: 1402,
+    carbonSteel: 1420,
     hybrid: 2410,
     ss304: 4660,
     ss316l: 6990,
