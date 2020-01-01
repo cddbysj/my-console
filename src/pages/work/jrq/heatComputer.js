@@ -1,7 +1,7 @@
 // ** 热量计算 ** //
-import React, { useState } from "react";
-import { Form, InputNumber, Button, Statistic, Row, Col, Card } from "antd";
-import { computeHolesCount, computeThroatDiameter } from "../helper";
+import React, { useState } from 'react';
+import { Form, InputNumber, Button, Statistic, Row, Col, Card } from 'antd';
+import { computeHolesCount, computeThroatDiameter } from '../helper';
 
 // 千焦到千卡的转换系数
 const KJ_TO_KCAL = 4.184;
@@ -21,7 +21,7 @@ const HeatComputerBase = props => {
   const [holesCount, setHolesCount] = useState(0);
 
   const {
-    form: { getFieldDecorator, validateFieldsAndScroll }
+    form: { getFieldDecorator, validateFieldsAndScroll },
   } = props;
 
   const onSubmit = e => {
@@ -35,14 +35,14 @@ const HeatComputerBase = props => {
           heatTo,
           steamPressure,
           steamTemperature,
-          steamEnthalpy
+          steamEnthalpy,
         } = values;
         // 计算水管的直径
         const waterDn = Math.ceil(
           2 * Math.sqrt(((flow / 3600 / waterVelocity) * 1000000) / Math.PI)
         );
         setWaterDn(waterDn);
-        console.log("水管直径", waterDn);
+        console.log('水管直径', waterDn);
         // 计算水需要吸收的热量
         const calorie = flow * 1000 * (heatTo - heatFrom);
         setCalorie(calorie);
@@ -67,44 +67,44 @@ const HeatComputerBase = props => {
             labelCol={{ span: 6 }}
           >
             <Form.Item label="水流量">
-              {getFieldDecorator("flow", {
+              {getFieldDecorator('flow', {
                 initialValue: 10,
-                rules: [{ required: true, message: "请输入水流量" }]
+                rules: [{ required: true, message: '请输入水流量' }],
               })(<InputNumber />)}
             </Form.Item>
             <Form.Item label="水的经济流速">
-              {getFieldDecorator("waterVelocity", {
-                initialValue: 1.5
+              {getFieldDecorator('waterVelocity', {
+                initialValue: 1.5,
               })(<InputNumber step={0.1} />)}
             </Form.Item>
             <Form.Item label="进水温度 °C">
-              {getFieldDecorator("heatFrom", {
+              {getFieldDecorator('heatFrom', {
                 initialValue: 5,
-                rules: [{ required: true, message: "请输入进水温度" }]
+                rules: [{ required: true, message: '请输入进水温度' }],
               })(<InputNumber />)}
             </Form.Item>
             <Form.Item label="出水温度 °C">
-              {getFieldDecorator("heatTo", {
+              {getFieldDecorator('heatTo', {
                 initialValue: 65,
-                rules: [{ required: true, message: "请输入出水温度" }]
+                rules: [{ required: true, message: '请输入出水温度' }],
               })(<InputNumber />)}
             </Form.Item>
             <Form.Item label="蒸汽压力 MPa">
-              {getFieldDecorator("steamPressure", {
+              {getFieldDecorator('steamPressure', {
                 initialValue: 0.5,
-                rules: [{ required: true, message: "请输入蒸汽压力" }]
+                rules: [{ required: true, message: '请输入蒸汽压力' }],
               })(<InputNumber step={0.1} min={0.1} max={1.3} />)}
             </Form.Item>
             <Form.Item label="蒸汽温度 °C">
-              {getFieldDecorator("steamTemperature", {
+              {getFieldDecorator('steamTemperature', {
                 initialValue: 165,
-                rules: [{ required: true, message: "请输入蒸汽温度" }]
+                rules: [{ required: true, message: '请输入蒸汽温度' }],
               })(<InputNumber min={100} max={350} />)}
             </Form.Item>
             <Form.Item label="蒸汽热焓 Kj/Kg">
-              {getFieldDecorator("steamEnthalpy", {
+              {getFieldDecorator('steamEnthalpy', {
                 initialValue: 2700,
-                rules: [{ required: true, message: "请输入蒸汽热焓" }]
+                rules: [{ required: true, message: '请输入蒸汽热焓' }],
               })(<InputNumber />)}
             </Form.Item>
             <Form.Item wrapperCol={{ offset: 6, span: 8 }}>
@@ -120,7 +120,7 @@ const HeatComputerBase = props => {
               <Statistic
                 title="蒸汽耗量"
                 value={steamCount}
-                valueStyle={{ color: "#f50" }}
+                valueStyle={{ color: '#f50' }}
                 suffix="kg/h"
               />
             </Card>
@@ -140,7 +140,7 @@ const HeatComputerBase = props => {
               <Statistic
                 title="吸收热量"
                 value={calorie}
-                valueStyle={{ color: "#f50" }}
+                valueStyle={{ color: '#f50' }}
                 suffix="KCal/h"
               />
             </Card>
@@ -161,6 +161,6 @@ const HeatComputerBase = props => {
   );
 };
 
-const HeatComputer = Form.create({ name: "header_computer" })(HeatComputerBase);
+const HeatComputer = Form.create({ name: 'header_computer' })(HeatComputerBase);
 
 export default HeatComputer;

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Spin } from "antd";
-import firebase from "components/firebase";
-import CreateOrderForm from "./createOrderForm";
-import OrderTable from "./orderTable";
+import React, { useState, useEffect } from 'react';
+import { Spin } from 'antd';
+import firebase from 'api/firebase';
+import CreateOrderForm from './createOrderForm';
+import OrderTable from './orderTable';
 
 const WorkPage = props => {
   const [orders, setOrders] = useState(null);
 
   useEffect(() => {
     const unsubscribe = firebase.orders().onSnapshot(snapshot => {
-      console.log("snapshot", snapshot);
+      console.log('snapshot', snapshot);
       const orders = [];
       snapshot.forEach(doc => orders.push({ ...doc.data(), id: doc.id }));
       setOrders(orders);

@@ -1,8 +1,8 @@
-import { combineReducers } from "redux";
-import todosReducer from "./todoSlice";
-
-console.log("todosReducer: ", todosReducer);
+import { combineReducers } from 'redux';
+import todosReducer from './todoSlice';
+import ordersReducer from './ordersSlice';
 
 export default combineReducers({
-  todos: todosReducer
+  todos: todosReducer,
+  orders: ordersReducer,
 });

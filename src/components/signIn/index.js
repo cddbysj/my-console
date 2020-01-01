@@ -1,7 +1,7 @@
-import React from "react";
-import { Form, Icon, Input, Button, message, Avatar } from "antd";
-import firebase from "../firebase";
-import useAuth from "../../hooks/useAuth";
+import React from 'react';
+import { Form, Icon, Input, Button, message, Avatar } from 'antd';
+import firebase from '../../api/firebase';
+import useAuth from '../../hooks/useAuth';
 
 function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -15,12 +15,12 @@ const LoginForm = props => {
     e.preventDefault();
     props.form.validateFields((err, values) => {
       if (!err) {
-        console.log("Received values of form: ", values);
+        console.log('Received values of form: ', values);
         const { email, password } = values;
         firebase
           .signInWithEmailAndPassword(email, password)
           .then(result => {
-            message.success("欢迎", 1);
+            message.success('欢迎', 1);
           })
           .catch(error => message.error(error.message));
       }
@@ -35,19 +35,19 @@ const LoginForm = props => {
     getFieldDecorator,
     getFieldsError,
     getFieldError,
-    isFieldTouched
+    isFieldTouched,
   } = props.form;
 
   // Only show error after a field is touched.
-  const emailError = isFieldTouched("email") && getFieldError("email");
-  const passwordError = isFieldTouched("password") && getFieldError("password");
+  const emailError = isFieldTouched('email') && getFieldError('email');
+  const passwordError = isFieldTouched('password') && getFieldError('password');
 
   return email ? (
-    <div style={{ display: "flex", alignItems: "center" }}>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
       <Avatar
         style={{
-          color: "#f56a00",
-          backgroundColor: "#fde3cf"
+          color: '#f56a00',
+          backgroundColor: '#fde3cf',
         }}
       >
         Bill
@@ -59,30 +59,30 @@ const LoginForm = props => {
   ) : (
     <Form layout="inline" onSubmit={handleSubmit}>
       <Form.Item
-        validateStatus={emailError ? "error" : ""}
-        help={emailError || ""}
+        validateStatus={emailError ? 'error' : ''}
+        help={emailError || ''}
       >
-        {getFieldDecorator("email", {
+        {getFieldDecorator('email', {
           rules: [
-            { type: "email", message: "无效的电子邮箱" },
-            { required: true, message: "请输入你的电子邮箱" }
-          ]
+            { type: 'email', message: '无效的电子邮箱' },
+            { required: true, message: '请输入你的电子邮箱' },
+          ],
         })(
           <Input
-            prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
+            prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
             placeholder="电子邮件"
           />
         )}
       </Form.Item>
       <Form.Item
-        validateStatus={passwordError ? "error" : ""}
-        help={passwordError || ""}
+        validateStatus={passwordError ? 'error' : ''}
+        help={passwordError || ''}
       >
-        {getFieldDecorator("password", {
-          rules: [{ required: true, message: "Please input your Password!" }]
+        {getFieldDecorator('password', {
+          rules: [{ required: true, message: 'Please input your Password!' }],
         })(
           <Input
-            prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
+            prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
             type="password"
             placeholder="密码"
           />
@@ -101,6 +101,6 @@ const LoginForm = props => {
   );
 };
 
-const WrappedLoginForm = Form.create({ name: "login" })(LoginForm);
+const WrappedLoginForm = Form.create({ name: 'login' })(LoginForm);
 
 export default WrappedLoginForm;
