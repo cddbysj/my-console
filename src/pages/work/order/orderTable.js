@@ -1,60 +1,59 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Table, Divider, Button, Switch, Icon, Typography } from 'antd';
-import CreateOrderForm from './createOrderForm';
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  Table,
+  Divider,
+  Button,
+  Switch,
+  Icon,
+  Typography,
+  Tag,
+  Badge
+} from "antd";
 
 const { Column } = Table;
 const { Text } = Typography;
 
 const OrderTable = props => {
-  const [visible, setVisible] = useState(false);
-
   const {
     orders,
     onRemoveOrder,
     onToggleNameplatePrint,
-    onToggleCertificatePrint,
+    onToggleCertificatePrint
   } = props;
 
-  const showModal = () => {
-    setVisible(true);
-  };
-
-  const handleCreate = () => {
-    setVisible(false);
-  };
-
-  const handleCancel = () => {
-    setVisible(false);
-  };
+  const onCreateOrder = () => {};
 
   return (
     <div>
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary" onClick={onCreateOrder}>
         新建订单
       </Button>
-      <CreateOrderForm
-        visible={visible}
-        onCancel={handleCancel}
-        onCreate={handleCreate}
-      />
       <Table
         dataSource={orders}
         rowKey={record => record.id}
-        pagination={{ position: 'top' }}
+        pagination={{ position: "top" }}
         size="middle"
       >
         <Column
           title="产品"
           dataIndex="product"
           key="product"
-          render={(text, record) => (
-            <Text copyable>
-              <Link to={{ pathname: `/product/${record.id}`, state: record }}>
-                {text}
+          render={(text, record) =>
+            record.products.map(product => (
+              <Link
+                key={product.name}
+                to={{ pathname: `/product/${record.id}`, state: product }}
+              >
+                <Tag color="magenta">{product.name}</Tag>
+                <Badge
+                  offset={[-4, 0]}
+                  count={product.quantity}
+                  style={{ backgroundColor: "#52c41a" }}
+                />
               </Link>
-            </Text>
-          )}
+            ))
+          }
         />
         <Column
           title="销售客户"
@@ -62,7 +61,6 @@ const OrderTable = props => {
           key="consumer"
           render={text => <Text copyable>{text}</Text>}
         />
-        <Column title="数量" dataIndex="quantity" key="quantity" />
         <Column
           title="采购日期"
           dataIndex="orderAt"
@@ -76,8 +74,8 @@ const OrderTable = props => {
           dataIndex="nameplate"
           key="nameplate"
           filters={[
-            { text: '已打印', value: true },
-            { text: '未打印', value: false },
+            { text: "已打印", value: true },
+            { text: "未打印", value: false }
           ]}
           onFilter={(value, record) => record.nameplate === value}
           render={(text, record) => (
@@ -95,8 +93,8 @@ const OrderTable = props => {
           dataIndex="certificate"
           key="certificate"
           filters={[
-            { text: '已打印', value: true },
-            { text: '未打印', value: false },
+            { text: "已打印", value: true },
+            { text: "未打印", value: false }
           ]}
           onFilter={(value, record) => record.certificate === value}
           render={(text, record) => (

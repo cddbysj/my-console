@@ -1,17 +1,18 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { Layout, Menu, Icon, Result } from 'antd';
-import useAuth from './hooks/useAuth';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Layout, Menu, Icon, Result } from "antd";
+import useAuth from "./hooks/useAuth";
 
-import LoginForm from './components/signIn';
-import WorkFlowPage from './pages/work/flow';
-import JrqProduct from './pages/work/jrq';
-import WkProduct from './pages/work/wk';
-import WorkPage from './pages/work/order';
-import MyPage from './pages/my';
-import Todo from './pages/todo';
-import FamilyPage from './pages/family';
-import ProductPage from './pages/work/order/product';
+import LoginForm from "./components/signIn";
+import WorkFlowPage from "./pages/work/flow";
+import CreateOrderForm from "./pages/work/order/createOrderForm";
+import JrqProduct from "./pages/work/jrq";
+import WkProduct from "./pages/work/wk";
+import WorkPage from "./pages/work/order";
+import MyPage from "./pages/my";
+import Todo from "./pages/todo";
+import FamilyPage from "./pages/family";
+import ProductPage from "./pages/work/order/product";
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -24,17 +25,17 @@ function App() {
       <Layout>
         <Sider
           style={{
-            overflow: 'auto',
-            height: '100vh',
-            position: 'fixed',
-            left: 0,
+            overflow: "auto",
+            height: "100vh",
+            position: "fixed",
+            left: 0
           }}
         >
           <div className="logo" />
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={['order-table']}
+            defaultSelectedKeys={["order-table"]}
           >
             <SubMenu
               key="work"
@@ -49,6 +50,12 @@ function App() {
                 <Link to="/work/flow">
                   <Icon type="table" />
                   工作流
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="create-order">
+                <Link to="/work/createOrder">
+                  <Icon type="file-add" />
+                  新建订单
                 </Link>
               </Menu.Item>
               <Menu.Item key="order-table">
@@ -92,21 +99,24 @@ function App() {
         <Layout style={{ marginLeft: 200 }}>
           <Header
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              background: '#fff',
-              padding: '0 10px',
-              margin: '0 10px',
+              display: "flex",
+              alignItems: "center",
+              background: "#fff",
+              padding: "0 10px",
+              margin: "0 10px"
             }}
           >
             <LoginForm />
           </Header>
-          <Content style={{ margin: '10px 10px 0', overflow: 'initial' }}>
-            <div style={{ padding: 24, background: '#fff' }}>
+          <Content style={{ margin: "10px 10px 0", overflow: "initial" }}>
+            <div style={{ padding: 24, background: "#fff" }}>
               {auth ? (
                 <Switch>
                   <Route path="/work/flow" exact>
                     <WorkFlowPage />
+                  </Route>
+                  <Route path="/work/createOrder" exact>
+                    <CreateOrderForm />
                   </Route>
                   <Route path="/work/orders" exact>
                     <WorkPage />

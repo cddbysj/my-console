@@ -1,29 +1,38 @@
 // ** 产品详情页 ** //
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { Descriptions, Typography, Divider } from 'antd';
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { Descriptions, Typography, Divider } from "antd";
+import { computeHolesCount, computeThroatDiameter } from "../helper";
 
 const { Text } = Typography;
 
 const ProductPage = () => {
   const {
     consumer,
-    product,
-    quantity,
-    date: { orderAt, arrivalAt },
-    flow,
-    weight,
-    pressure,
-    throatDiameter,
-    holesCount,
-    flangeStandard,
+    products,
+    date: { orderAt, arrivalAt }
   } = useLocation().state;
 
+  const {
+    flow,
+    heatFrom,
+    heatTo,
+    quantity,
+    weight,
+    pressure,
+    flangeStandard
+  } = products[0];
+
+  // 喉部直径由流量推算出
+  const throatDiameter = computeThroatDiameter(flow);
+  // 斜孔数量由流量和温差共同推算出
+  const holesCount = computeHolesCount(flow, heatFrom, heatTo);
+
   const arrivalMonth = arrivalAt.slice(0, 7);
-  const serialNumber = `${orderAt.replace(/-/g, '')}01`;
+  const serialNumber = `${orderAt.replace(/-/g, "")}01`;
 
   const nameplateText = `
-  产品型号: ${product}
+  产品型号: ${products[0].name}
   数量: ${quantity}
   下单日期: ${orderAt}
   出厂日期: ${arrivalMonth}
@@ -36,27 +45,27 @@ const ProductPage = () => {
 
   // 根据产品型号推算三个口径，特殊型号后续自行修改
   // HQS-125-20G --> ['HQS', 125, 20, 'G']
-  const prefix = product.split('-')[0];
-  const dn = `DN${product.split('-')[1]}`;
+  const prefix = products[0].name.split("-")[0];
+  const dn = `DN${products[0].name.split("-")[1]}`;
   const dnInlet = dn; // 进水口径
   const dnOutlet = dn; // 出水口径
-  const dnSteam = prefix === 'JRG' ? `DN150` : dn; // 蒸汽口径
+  const dnSteam = prefix === "JRG" ? `DN150` : dn; // 蒸汽口径
 
   // 符号到材质的映射表
   const symbolToMaterial = {
-    G: '碳钢',
-    C: '304',
-    H: '外壳碳钢，芯体 304',
+    G: "碳钢",
+    C: "304",
+    H: "外壳碳钢，芯体 304"
   };
 
-  const materialSymbol = product.slice(-1).toUpperCase(); // 材质符号
+  const materialSymbol = products[0].name.slice(-1).toUpperCase(); // 材质符号
   const material = symbolToMaterial[materialSymbol];
 
   // 型号到价格的映射表
   const matrix = {
     G: { DN40: 510, DN65: 540, DN125: 1420, DN250: 3050 },
     C: { DN40: 920, DN65: 1960, DN125: 4660, DN250: 10550 },
-    H: { DN40: 640, DN65: 730, DN125: 2410, DN250: 6500 },
+    H: { DN40: 640, DN65: 730, DN125: 2410, DN250: 6500 }
   };
 
   // 产品单价
@@ -67,7 +76,9 @@ const ProductPage = () => {
   return (
     <div>
       <Descriptions title="铭牌信息" bordered>
-        <Descriptions.Item label="产品型号">{product}</Descriptions.Item>
+        <Descriptions.Item label="产品型号">
+          {products[0].name}
+        </Descriptions.Item>
         <Descriptions.Item label="销售客户">{consumer}</Descriptions.Item>
         <Descriptions.Item label="数量">{quantity}</Descriptions.Item>
         <Descriptions.Item label="下单日期" span={2}>
