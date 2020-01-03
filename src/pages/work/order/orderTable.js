@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   Table,
   Divider,
@@ -8,8 +8,8 @@ import {
   Icon,
   Typography,
   Tag,
-  Badge,
-} from 'antd';
+  Badge
+} from "antd";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -19,7 +19,7 @@ const OrderTable = props => {
     orders,
     onRemoveOrder,
     onToggleNameplatePrint,
-    onToggleCertificatePrint,
+    onToggleCertificatePrint
   } = props;
 
   const onCreateOrder = () => {};
@@ -32,7 +32,7 @@ const OrderTable = props => {
       <Table
         dataSource={orders}
         rowKey={record => record.id}
-        pagination={{ position: 'top' }}
+        pagination={{ position: "top" }}
         size="middle"
       >
         <Column
@@ -40,14 +40,14 @@ const OrderTable = props => {
           dataIndex="product"
           key="product"
           render={(text, record) => (
-            <Link to={{ pathname: `/product/${record.id}`, state: record }}>
+            <Link to={{ pathname: `/order/${record.id}`, state: record }}>
               {record.products.map(product => (
                 <Tag color="magenta" key={product.name}>
-                  <span>{product.name}</span>
+                  <span style={{ fontSize: 18 }}>{product.name}</span>
                   <Badge
-                    offset={[1, -4]}
+                    offset={[1, -5]}
                     count={product.quantity}
-                    style={{ backgroundColor: '#52c41a' }}
+                    style={{ backgroundColor: "#52c41a" }}
                   />
                 </Tag>
               ))}
@@ -73,8 +73,8 @@ const OrderTable = props => {
           dataIndex="nameplate"
           key="nameplate"
           filters={[
-            { text: '已打印', value: true },
-            { text: '未打印', value: false },
+            { text: "已打印", value: true },
+            { text: "未打印", value: false }
           ]}
           onFilter={(value, record) => record.nameplate === value}
           render={(text, record) => (
@@ -92,8 +92,8 @@ const OrderTable = props => {
           dataIndex="certificate"
           key="certificate"
           filters={[
-            { text: '已打印', value: true },
-            { text: '未打印', value: false },
+            { text: "已打印", value: true },
+            { text: "未打印", value: false }
           ]}
           onFilter={(value, record) => record.certificate === value}
           render={(text, record) => (

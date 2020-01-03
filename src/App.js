@@ -12,8 +12,8 @@ import WorkPage from "./pages/work/order";
 import MyPage from "./pages/my";
 import Todo from "./pages/todo";
 import FamilyPage from "./pages/family";
-import ProductPage from "./pages/work/order/product";
-
+import OrderDetailPage from "./pages/work/order/orderDetail";
+import ContractPage from "./pages/work/order/contract";
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -139,7 +139,16 @@ function App() {
                   <Route path="/family">
                     <FamilyPage />
                   </Route>
-                  <Route path="/product/:id" children={<ProductPage />} />
+                  <Route
+                    path="/order/:id"
+                    children={<OrderDetailPage />}
+                    exact
+                  />
+                  <Route
+                    path="/order/contract/:id"
+                    children={<ContractPage />}
+                    exact
+                  />
                   <Route path="/" exact>
                     <WorkPage />
                   </Route>

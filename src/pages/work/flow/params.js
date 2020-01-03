@@ -1,33 +1,15 @@
 // ** 产品参数确认 ** //
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "antd";
-import CreateOrderForm from "pages/work/order/createOrderForm";
+import { useHistory } from "react-router-dom";
 
 const Params = props => {
-  const [visible, setVisible] = useState(false);
-
-  const showModal = () => {
-    setVisible(true);
-  };
-
-  const handleCreate = () => {
-    setVisible(false);
-  };
-
-  const handleCancel = () => {
-    setVisible(false);
-  };
-
+  const history = useHistory();
   return (
     <div>
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary" onClick={() => history.push("/work/createOrder")}>
         新建订单
       </Button>
-      <CreateOrderForm
-        visible={visible}
-        onCancel={handleCancel}
-        onCreate={handleCreate}
-      />
     </div>
   );
 };

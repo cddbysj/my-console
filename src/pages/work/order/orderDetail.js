@@ -1,10 +1,10 @@
 // ** 产品详情页 ** //
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { Descriptions, Typography, Divider, Collapse, Row, Col } from 'antd';
-import { computeHolesCount, computeThroatDiameter } from '../helper';
+import React from "react";
+import { useLocation, Link } from "react-router-dom";
+import { Descriptions, Typography, Button, Collapse, Row, Col } from "antd";
+import { computeHolesCount, computeThroatDiameter } from "../helper";
 
-import styles from './product.module.css';
+import styles from "./orderDetail.module.css";
 
 // 型号到价格的映射表
 const matrix = {
@@ -12,36 +12,37 @@ const matrix = {
     DN40: 510,
     DN65: 540,
     DN125: 1420,
-    DN250: 3050,
+    DN250: 3050
   },
-  '304': {
+  "304": {
     DN40: 920,
     DN65: 1960,
     DN125: 4660,
-    DN250: 10550,
+    DN250: 10550
   },
-  '316L': {
+  "316L": {
     DN40: 1380,
     DN65: 2490,
     DN125: 6990,
-    DN250: 15825,
+    DN250: 15825
   },
-  '外壳碳钢 芯体304': {
+  "外壳碳钢 芯体304": {
     DN40: 640,
     DN65: 730,
     DN125: 2410,
-    DN250: 6500,
-  },
+    DN250: 6500
+  }
 };
 
 const { Text, Title } = Typography;
 const { Panel } = Collapse;
 
-const ProductPage = () => {
+const OrderDetailPage = () => {
   let {
+    id,
     consumer,
     products,
-    date: { orderAt, arrivalAt },
+    date: { orderAt, arrivalAt }
   } = useLocation().state;
 
   const arrivalMonth = arrivalAt.slice(0, 7);
@@ -56,7 +57,7 @@ const ProductPage = () => {
       weight,
       pressure,
       flangeStandard,
-      material,
+      material
     } = product;
 
     // 喉部直径由流量推算出
@@ -66,14 +67,14 @@ const ProductPage = () => {
 
     // 根据产品型号推算三个口径，特殊型号后续自行修改
     // HQS-125-20G --> ['HQS', 125, 20, 'G']
-    const prefix = name.split('-')[0];
-    const dn = `DN${name.split('-')[1]}`;
+    const prefix = name.split("-")[0];
+    const dn = `DN${name.split("-")[1]}`;
     const dnInlet = dn; // 进水口径
     const dnOutlet = dn; // 出水口径
-    const dnSteam = prefix === 'JRG' ? `DN150` : dn; // 蒸汽口径
+    const dnSteam = prefix === "JRG" ? `DN150` : dn; // 蒸汽口径
 
     // 生产编号
-    const serialNumber = `${orderAt.replace(/-/g, '')}01`;
+    const serialNumber = `${orderAt.replace(/-/g, "")}01`;
 
     // 产品单价
     const price = matrix[material][dn];
@@ -103,21 +104,23 @@ const ProductPage = () => {
       price,
       serialNumber,
       nameplateText,
-      contractItemText,
+      contractItemText
     };
   });
 
   return (
     <div>
-      <Row gutter={[0, 40]}>
+      <Row gutter={[0, 80]} style={{ marginBottom: 64 }}>
         <Col span={3}>
-          <Title level={4}>合同产品单</Title>
+          <Title level={4} type="secondary">
+            产品清单
+          </Title>
         </Col>
-        <Col span={16}>
+        <Col span={21} style={{ paddingLeft: 16 }}>
           <Collapse
             expandIconPosition="right"
             bordered={false}
-            defaultActiveKey={['dn']}
+            defaultActiveKey={["dn"]}
           >
             {products.map(product => (
               <Panel
@@ -136,56 +139,18 @@ const ProductPage = () => {
                 </p>
               </Panel>
             ))}
-
-            {/* <Panel className={styles.collapsePanel} header="口径" key="dn">
-              <p>进水侧口径 DN250，出水侧口径 DN250，蒸汽侧口径 DN150</p>
-            </Panel>
-            <Panel
-              className={styles.collapsePanel}
-              header="喉径 & 斜孔"
-              key="holesCount"
-            >
-              <p>
-                喉径 {throatDiameter}，斜孔 {holesCount}
-                ，斜孔直径 3.5 mm，角度与水平线成 30℃
-              </p>
-            </Panel>
-            <Panel
-              className={styles.collapsePanel}
-              header="材质 & 法兰标准"
-              key="material"
-            >
-              <p>
-                材质 {material}，法兰标准 {flangeStandard}
-              </p>
-            </Panel>
-            <Panel className={styles.collapsePanel} header="价格" key="price">
-              <p>￥{price}</p>
-            </Panel>
-            <Panel
-              className={styles.collapsePanel}
-              header="合同文本"
-              key="contractText"
-            >
-              <div>
-                <Text copyable={{ text: contractText }}>{contractText}</Text>
-              </div>
-            </Panel> */}
           </Collapse>
         </Col>
-        <Col span={5} style={{ width: '100%' }}></Col>
       </Row>
-      <Row gutter={[24, 40]} style={{ background: '#fafafa' }}>
+      <Row gutter={[16, 80]} style={{ background: "#fafafa" }}>
         <Col span={3}>
-          <Title level={4}>铭牌</Title>
+          <Title level={4} type="secondary">
+            铭牌
+          </Title>
         </Col>
         {products.map(product => (
-          <Col
-            span={5}
-            key={product.name}
-            style={{ background: 'white', margin: '0 8px' }}
-          >
-            <Descriptions>
+          <Col span={7 * (4 - products.length)} key={product.name}>
+            <Descriptions className={styles.nameplateCard}>
               <Descriptions.Item label="产品型号" span={3}>
                 {product.name}
               </Descriptions.Item>
@@ -220,8 +185,43 @@ const ProductPage = () => {
           </Col>
         ))}
       </Row>
+      <Row gutter={[16, 80]}>
+        <Col span={3}>
+          <div>
+            <Title level={4} type="secondary">
+              链接
+            </Title>
+          </div>
+        </Col>
+        <Col span={21}>
+          <div>
+            <div>
+              <Link
+                to={{
+                  pathname: `/order/contract/${id}`,
+                  state: { id, products, date: { orderAt, arrivalAt } }
+                }}
+              >
+                <Button type="link" icon="right-square">
+                  采购合同
+                </Button>
+              </Link>
+              <Link
+                to={{
+                  pathname: `/order/contract/${id}`,
+                  state: { id, products, date: { orderAt, arrivalAt } }
+                }}
+              >
+                <Button type="link" icon="right-square">
+                  技术参数
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </Col>
+      </Row>
     </div>
   );
 };
 
-export default ProductPage;
+export default OrderDetailPage;

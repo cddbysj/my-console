@@ -4,3 +4,9 @@
   border: none;
   overflow: hidden;
 }
+
+.nameplateCard {
+  background-color: white;
+  padding: 16px;
+  border-radius: 6px;
+}
