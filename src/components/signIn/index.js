@@ -52,7 +52,12 @@ const LoginForm = props => {
       >
         Bill
       </Avatar>
-      <Button style={{ marginLeft: 20 }} size="small" onClick={signOut}>
+      <Button
+        icon="logout"
+        style={{ marginLeft: 20 }}
+        size="small"
+        onClick={signOut}
+      >
         登出
       </Button>
     </div>

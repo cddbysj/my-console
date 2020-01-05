@@ -1,30 +1,27 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
-import { Divider, Typography, Col, Row, Card, Table } from "antd";
-import "./contractPanel.scss";
+// ** 合同页面，由数据自动生成 ** //
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { Divider, Typography, Col, Row, Card, Table } from 'antd';
+import './contract.module.css';
 
 const { Text, Title } = Typography;
 const { Column } = Table;
 
+// 加热器结构形式和符号的映射
+const modelMap = {
+  HJ: '浸没式加热器',
+  HQS: '管道式加热器',
+};
+
 const ContractPage = () => {
   let {
     products,
-    date: { orderAt, arrivalAt }
+    date: { orderAt, arrivalAt },
   } = useLocation().state;
-
-  // 判断是浸没式还是管道式加热器
-  const isHj = name => {
-    return (
-      name.toUpperCase().includes("HJ") ||
-      name.toUpperCase().includes("HX") ||
-      name.toUpperCase().includes("CLP")
-    );
-  };
 
   products = products.map(product => ({
     ...product,
     totalPrice: product.quantity * product.price,
-    model: isHj(product.name) ? "浸没式加热器" : "管道式加热器"
   }));
 
   // 订单内产品总数量
@@ -40,12 +37,12 @@ const ContractPage = () => {
   const contractNumber = `${orderAt}01`;
   // 汉化日期
   const sinicizationDate = orderAt => {
-    const year = orderAt.split("-")[0];
-    const month = orderAt.split("-")[1];
-    const day = orderAt.split("-")[2];
+    const year = orderAt.split('-')[0];
+    const month = orderAt.split('-')[1];
+    const day = orderAt.split('-')[2];
     return {
       contractStartAt: `${year} 年 ${month} 月 ${day} 日`,
-      contractEndAt: `${+year + 1} 年 ${month} 月 ${day} 日`
+      contractEndAt: `${+year + 1} 年 ${month} 月 ${day} 日`,
     };
   };
   // 合同签订和到期时间
@@ -81,13 +78,21 @@ const ContractPage = () => {
             pagination={false}
             bordered
           >
-            <Column title="产品名称" dataIndex="model" key="model" />
+            <Column
+              title="产品名称"
+              dataIndex="model"
+              key="model"
+              render={(text, record) => modelMap[record.model]}
+            />
             <Column
               title="型号"
               dataIndex="name"
               key="name"
-              render={text => {
-                const s = text.split("-");
+              render={(text, record) => {
+                const s = text.split('-');
+                // HQS-65-7C --> ['HQS', '65', '7C']
+                // HJ-40C --> ['HJ', '40C']
+                if (record.model === 'HJ') return `DN${s[1]}`;
                 return `DN${s[1]}-${s[2]}`;
               }}
             />

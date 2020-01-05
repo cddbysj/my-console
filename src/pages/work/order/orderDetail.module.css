@@ -1,6 +1,5 @@
 .collapsePanel {
   margin-bottom: 24;
-  margin-left: -16px;
   border: none;
   overflow: hidden;
 }
@@ -8,5 +7,6 @@
 .nameplateCard {
   background-color: white;
   padding: 16px;
+  margin: 16px;
   border-radius: 6px;
 }

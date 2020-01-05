@@ -1,16 +1,14 @@
 .productRow {
   margin-bottom: 20px;
-  border: 1px solid #00a0e9;
-  border-radius: 4px;
 }
 
 .productCol {
   padding-top: 30px;
-  border-right: 1px solid #00a0e9;
-  opacity: 0.5;
-  transition: all 0.5 ease-in-out;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
 }
 
 .productCol:hover {
-  opacity: 1;
+  border: 1px solid #00a0e9;
+  transition: all 0.5s ease-in-out;
 }

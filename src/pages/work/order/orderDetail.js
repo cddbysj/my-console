@@ -1,40 +1,21 @@
 // ** 产品详情页 ** //
-import React from "react";
-import { useLocation, Link } from "react-router-dom";
-import { Descriptions, Typography, Button, Collapse, Row, Col } from "antd";
-import { computeHolesCount, computeThroatDiameter } from "../helper";
+import React from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import {
+  Descriptions,
+  Typography,
+  Button,
+  Collapse,
+  Row,
+  Col,
+  Empty,
+} from 'antd';
+import * as ROUTES from 'constants/routes';
+import * as PRODUCT from 'constants/product';
+import { computeHolesCount, computeThroatDiameter } from '../helper';
+import styles from './orderDetail.module.css';
 
-import styles from "./orderDetail.module.css";
-
-// 型号到价格的映射表
-const matrix = {
-  碳钢: {
-    DN40: 510,
-    DN65: 540,
-    DN125: 1420,
-    DN250: 3050
-  },
-  "304": {
-    DN40: 920,
-    DN65: 1960,
-    DN125: 4660,
-    DN250: 10550
-  },
-  "316L": {
-    DN40: 1380,
-    DN65: 2490,
-    DN125: 6990,
-    DN250: 15825
-  },
-  "外壳碳钢 芯体304": {
-    DN40: 640,
-    DN65: 730,
-    DN125: 2410,
-    DN250: 6500
-  }
-};
-
-const { Text, Title } = Typography;
+const { Text, Title, Paragraph } = Typography;
 const { Panel } = Collapse;
 
 const OrderDetailPage = () => {
@@ -42,7 +23,7 @@ const OrderDetailPage = () => {
     id,
     consumer,
     products,
-    date: { orderAt, arrivalAt }
+    date: { orderAt, arrivalAt },
   } = useLocation().state;
 
   const arrivalMonth = arrivalAt.slice(0, 7);
@@ -57,7 +38,8 @@ const OrderDetailPage = () => {
       weight,
       pressure,
       flangeStandard,
-      material
+      material,
+      model,
     } = product;
 
     // 喉部直径由流量推算出
@@ -67,17 +49,24 @@ const OrderDetailPage = () => {
 
     // 根据产品型号推算三个口径，特殊型号后续自行修改
     // HQS-125-20G --> ['HQS', 125, 20, 'G']
-    const prefix = name.split("-")[0];
-    const dn = `DN${name.split("-")[1]}`;
+    // HJ-50C --> ['HJ', '50C']
+    const prefix = name.split('-')[0];
+    const dn =
+      model === 'HQS'
+        ? `DN${name.split('-')[1]}`
+        : `DN${name.split('-')[1].slice(0, name.split('-')[1].length - 1)}`;
     const dnInlet = dn; // 进水口径
     const dnOutlet = dn; // 出水口径
-    const dnSteam = prefix === "JRG" ? `DN150` : dn; // 蒸汽口径
+    const dnSteam = prefix === 'JRG' ? `DN150` : dn; // 蒸汽口径
 
     // 生产编号
-    const serialNumber = `${orderAt.replace(/-/g, "")}01`;
+    const serialNumber = `${orderAt.replace(/-/g, '')}01`;
 
     // 产品单价
-    const price = matrix[material][dn];
+    const price =
+      model === 'HQS'
+        ? PRODUCT.HQS_MATRIX[material][dn]
+        : PRODUCT.HJ_MATRIX[material][dn];
 
     const nameplateText = `
   产品型号: ${product.name}
@@ -91,7 +80,10 @@ const OrderDetailPage = () => {
   压力 MPa: ${pressure}
 `;
     // 合同内单类别产品信息
-    const contractItemText = `法兰标准：${flangeStandard}。材质 ${material}，进水侧口径 ${dnInlet}，出水侧口径 ${dnOutlet}，蒸汽侧口径 ${dnSteam}，喉径 ${throatDiameter}mm，斜孔数 ${holesCount}，斜孔直径 3.5mm，角度与水平线成 30℃。`;
+    const contractItemText =
+      model === 'HQS'
+        ? `法兰标准：${flangeStandard}。材质 ${material}，进水侧口径 ${dnInlet}，出水侧口径 ${dnOutlet}，蒸汽侧口径 ${dnSteam}，喉径 ${throatDiameter}mm，斜孔数 ${holesCount}，斜孔直径 3.5mm，角度与水平线成 30℃。`
+        : `法兰标准：${flangeStandard}。材质 ${material}，口径 ${dn}`;
 
     return {
       ...product,
@@ -104,23 +96,63 @@ const OrderDetailPage = () => {
       price,
       serialNumber,
       nameplateText,
-      contractItemText
+      contractItemText,
     };
   });
+
+  // 传给技术参数页面的属性，仅传递 id 以及与技术参数相关属性
+  const propsPassToSpecPage = {
+    id,
+    products: products.map(
+      ({
+        name,
+        flow,
+        heatFrom,
+        heatTo,
+        quantity,
+        weight,
+        pressure,
+        flangeStandard,
+        model,
+        throatDiameter,
+        holesCount,
+        dnInlet,
+        dnOutlet,
+        dnSteam,
+        material,
+      }) => ({
+        name,
+        flow,
+        heatFrom,
+        heatTo,
+        quantity,
+        weight,
+        pressure,
+        flangeStandard,
+        model,
+        throatDiameter,
+        holesCount,
+        dnInlet,
+        dnOutlet,
+        dnSteam,
+        material,
+      })
+    ),
+  };
 
   return (
     <div>
       <Row gutter={[0, 80]} style={{ marginBottom: 64 }}>
-        <Col span={3}>
+        <Col span={6}>
           <Title level={4} type="secondary">
             产品清单
           </Title>
         </Col>
-        <Col span={21} style={{ paddingLeft: 16 }}>
+        <Col span={18} style={{ paddingLeft: 16 }}>
           <Collapse
             expandIconPosition="right"
             bordered={false}
-            defaultActiveKey={["dn"]}
+            defaultActiveKey={['dn']}
           >
             {products.map(product => (
               <Panel
@@ -142,64 +174,120 @@ const OrderDetailPage = () => {
           </Collapse>
         </Col>
       </Row>
-      <Row gutter={[16, 80]} style={{ background: "#fafafa" }}>
-        <Col span={3}>
+      <Row gutter={[0, 80]} style={{ marginBottom: 64 }}>
+        <Col span={6}>
+          <Title level={4} type="secondary">
+            CRM 辅助文本
+          </Title>
+        </Col>
+        <Col span={18} style={{ paddingLeft: 16 }}>
+          <Collapse
+            expandIconPosition="right"
+            bordered={false}
+            defaultActiveKey={['purchaseTitle']}
+          >
+            <Panel
+              className={styles.collapsePanel}
+              header="采购主题"
+              key="purchaseTitle"
+            >
+              <Paragraph copyable>
+                {consumer}{' '}
+                {products
+                  .map(product => `${product.name} ${product.quantity} 台 `)
+                  .join('')}
+              </Paragraph>
+            </Panel>
+            <Panel
+              className={styles.collapsePanel}
+              header={<div>产品明细</div>}
+              key="productsInfo"
+            >
+              {products.map((product, index) => (
+                <Collapse key={product.name} defaultActiveKey="0">
+                  <Panel header={product.name} key={index}>
+                    <p>品名：{product.model}</p>
+                    <p>型号：{product.name}</p>
+                    <p>数量：{product.quantity}</p>
+                    <p>单价：￥{product.price}</p>
+                    <p>金额：￥{product.quantity * product.price}</p>
+                    <div>
+                      备注：<Text copyable>{product.contractItemText}</Text>
+                    </div>
+                  </Panel>
+                </Collapse>
+              ))}
+            </Panel>
+          </Collapse>
+        </Col>
+      </Row>
+      <Row gutter={[8, 80]} style={{ background: '#fafafa', width: '100%' }}>
+        <Col span={6}>
           <Title level={4} type="secondary">
             铭牌
           </Title>
         </Col>
-        {products.map(product => (
-          <Col span={7 * (4 - products.length)} key={product.name}>
-            <Descriptions className={styles.nameplateCard}>
-              <Descriptions.Item label="产品型号" span={3}>
-                {product.name}
-              </Descriptions.Item>
-              <Descriptions.Item label="销售客户" span={3}>
-                {consumer}
-              </Descriptions.Item>
-              <Descriptions.Item label="数量" span={3}>
-                {product.quantity}
-              </Descriptions.Item>
-              <Descriptions.Item label="下单日期" span={3}>
-                {orderAt}
-              </Descriptions.Item>
-              <Descriptions.Item label="出厂日期" span={3}>
-                {arrivalMonth}
-              </Descriptions.Item>
-              <Descriptions.Item label="编号" span={3}>
-                {product.serialNumber}
-              </Descriptions.Item>
-              <Descriptions.Item label="流量" span={3}>
-                {product.flow} t/h
-              </Descriptions.Item>
-              <Descriptions.Item label="重量" span={3}>
-                {product.weight} kg
-              </Descriptions.Item>
-              <Descriptions.Item label="压力" span={3}>
-                {product.pressure} MPa
-              </Descriptions.Item>
-              <Descriptions.Item label="铭牌纯文本" span={3}>
-                <Text copyable={{ text: product.nameplateText }}>复制</Text>
-              </Descriptions.Item>
-            </Descriptions>
-          </Col>
-        ))}
+        <Col span={18}>
+          {products.filter(product => product.model === 'HQS').length ? (
+            products
+              .filter(product => product.model === 'HQS')
+              .map(product => (
+                <Descriptions
+                  key={product.name}
+                  className={styles.nameplateCard}
+                >
+                  <Descriptions.Item label="产品型号" span={3}>
+                    {product.name}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="销售客户" span={3}>
+                    {consumer}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="数量" span={3}>
+                    {product.quantity}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="下单日期" span={3}>
+                    {orderAt}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="出厂日期" span={3}>
+                    {arrivalMonth}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="编号" span={3}>
+                    {product.serialNumber}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="流量" span={3}>
+                    {product.flow} t/h
+                  </Descriptions.Item>
+                  <Descriptions.Item label="重量" span={3}>
+                    {product.weight} kg
+                  </Descriptions.Item>
+                  <Descriptions.Item label="压力" span={3}>
+                    {product.pressure} MPa
+                  </Descriptions.Item>
+                  <Descriptions.Item label="铭牌纯文本" span={3}>
+                    <Text copyable={{ text: product.nameplateText }}>复制</Text>
+                  </Descriptions.Item>
+                </Descriptions>
+              ))
+          ) : (
+            <Empty description="当前订单没有铭牌信息" />
+          )}
+        </Col>
       </Row>
       <Row gutter={[16, 80]}>
-        <Col span={3}>
+        <Col span={6}>
           <div>
             <Title level={4} type="secondary">
               链接
             </Title>
           </div>
         </Col>
-        <Col span={21}>
+        <Col span={18}>
           <div>
             <div>
               <Link
                 to={{
-                  pathname: `/order/contract/${id}`,
-                  state: { id, products, date: { orderAt, arrivalAt } }
+                  pathname: `${ROUTES.ORDER_CONTRACT}/${id}`,
+                  state: { id, products, date: { orderAt, arrivalAt } },
                 }}
               >
                 <Button type="link" icon="right-square">
@@ -208,8 +296,18 @@ const OrderDetailPage = () => {
               </Link>
               <Link
                 to={{
-                  pathname: `/order/contract/${id}`,
-                  state: { id, products, date: { orderAt, arrivalAt } }
+                  pathname: `${ROUTES.CERTIFICATE_PAGE}/${id}`,
+                  state: propsPassToSpecPage,
+                }}
+              >
+                <Button type="link" icon="right-square">
+                  产品合格证
+                </Button>
+              </Link>
+              <Link
+                to={{
+                  pathname: `${ROUTES.ORDER_SPEC}/${id}`,
+                  state: propsPassToSpecPage,
                 }}
               >
                 <Button type="link" icon="right-square">

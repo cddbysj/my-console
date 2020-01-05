@@ -1,19 +1,23 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Layout, Menu, Icon, Result } from "antd";
-import useAuth from "./hooks/useAuth";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Layout, Menu, Icon, Result } from 'antd';
+import useAuth from './hooks/useAuth';
 
-import LoginForm from "./components/signIn";
-import WorkFlowPage from "./pages/work/flow";
-import CreateOrderForm from "./pages/work/order/createOrderForm";
-import JrqProduct from "./pages/work/jrq";
-import WkProduct from "./pages/work/wk";
-import WorkPage from "./pages/work/order";
-import MyPage from "./pages/my";
-import Todo from "./pages/todo";
-import FamilyPage from "./pages/family";
-import OrderDetailPage from "./pages/work/order/orderDetail";
-import ContractPage from "./pages/work/order/contract";
+import LoginForm from './components/signIn';
+import WorkFlowPage from './pages/work/flow';
+import CreateOrderForm from './pages/work/order/createOrderForm';
+import JrqProduct from './pages/work/jrq';
+import WkProduct from './pages/work/wk';
+import WorkPage from './pages/work/order';
+import MyPage from './pages/my';
+import Todo from './pages/todo';
+import FamilyPage from './pages/family';
+import OrderDetailPage from './pages/work/order/orderDetail';
+import ContractPage from './pages/work/order/contract';
+import OrderSpecPage from './pages/work/order/orderSpec';
+import CertificatePage from './pages/work/order/certificate';
+import * as ROUTES from 'constants/routes';
+
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -25,17 +29,17 @@ function App() {
       <Layout>
         <Sider
           style={{
-            overflow: "auto",
-            height: "100vh",
-            position: "fixed",
-            left: 0
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
           }}
         >
           <div className="logo" />
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["order-table"]}
+            defaultSelectedKeys={['order-table']}
           >
             <SubMenu
               key="work"
@@ -47,44 +51,44 @@ function App() {
               }
             >
               <Menu.Item key="work-flow">
-                <Link to="/work/flow">
-                  <Icon type="table" />
+                <Link to={ROUTES.WORK_FLOW}>
+                  <Icon type="rocket" />
                   工作流
                 </Link>
               </Menu.Item>
               <Menu.Item key="create-order">
-                <Link to="/work/createOrder">
+                <Link to={ROUTES.CREATE_ORDER}>
                   <Icon type="file-add" />
                   新建订单
                 </Link>
               </Menu.Item>
               <Menu.Item key="order-table">
-                <Link to="/work/orders">
+                <Link to={ROUTES.WORK_ORDERS}>
                   <Icon type="table" />
                   订单
                 </Link>
               </Menu.Item>
               <Menu.Item key="jrq">
-                <Link to="/work/jrq">
+                <Link to={ROUTES.WORK_JRQ}>
                   <Icon type="file" />
                   加热器
                 </Link>
               </Menu.Item>
               <Menu.Item key="wk">
-                <Link to="/work/wk">
+                <Link to={ROUTES.WORK_WK}>
                   <Icon type="file" />
                   温控
                 </Link>
               </Menu.Item>
             </SubMenu>
             <Menu.Item key="my">
-              <Link to="/my">
+              <Link to={ROUTES.MY_PAGE}>
                 <Icon type="project" />
                 个人事务
               </Link>
             </Menu.Item>
             <Menu.Item key="family">
-              <Link to="/family">
+              <Link to={ROUTES.FAMILY_PAGE}>
                 <Icon type="home" />家
               </Link>
             </Menu.Item>
@@ -99,57 +103,67 @@ function App() {
         <Layout style={{ marginLeft: 200 }}>
           <Header
             style={{
-              display: "flex",
-              alignItems: "center",
-              background: "#fff",
-              padding: "0 10px",
-              margin: "0 10px"
+              display: 'flex',
+              alignItems: 'center',
+              background: '#fff',
+              padding: '0 10px',
+              margin: '0 10px',
             }}
           >
             <LoginForm />
           </Header>
-          <Content style={{ margin: "10px 10px 0", overflow: "initial" }}>
-            <div style={{ padding: 24, background: "#fff" }}>
+          <Content style={{ margin: '10px 10px 0', overflow: 'initial' }}>
+            <div style={{ padding: 24, background: '#fff' }}>
               {auth ? (
                 <Switch>
-                  <Route path="/work/flow" exact>
+                  <Route path={ROUTES.WORK_FLOW} exact>
                     <WorkFlowPage />
                   </Route>
-                  <Route path="/work/createOrder" exact>
+                  <Route path={ROUTES.CREATE_ORDER} exact>
                     <CreateOrderForm />
                   </Route>
-                  <Route path="/work/orders" exact>
+                  <Route path={ROUTES.WORK_ORDERS} exact>
                     <WorkPage />
                   </Route>
-                  <Route path="/work/jrq" exact>
+                  <Route path={ROUTES.WORK_JRQ} exact>
                     <JrqProduct />
                   </Route>
-                  <Route path="/work/wk" exact>
+                  <Route path={ROUTES.WORK_WK} exact>
                     <WkProduct />
                   </Route>
                   <Route path="/work" exact>
                     <WorkPage />
                   </Route>
-                  <Route path="/my">
+                  <Route path={ROUTES.MY_PAGE}>
                     <MyPage />
                   </Route>
                   <Route path="/todos">
                     <Todo />
                   </Route>
-                  <Route path="/family">
+                  <Route path={ROUTES.FAMILY_PAGE}>
                     <FamilyPage />
                   </Route>
                   <Route
-                    path="/order/:id"
+                    path={ROUTES.ORDER_DETAIL}
                     children={<OrderDetailPage />}
                     exact
                   />
                   <Route
-                    path="/order/contract/:id"
+                    path={`${ROUTES.ORDER_CONTRACT}/:id`}
                     children={<ContractPage />}
                     exact
                   />
-                  <Route path="/" exact>
+                  <Route
+                    path={`${ROUTES.CERTIFICATE_PAGE}/:id`}
+                    children={<CertificatePage />}
+                    exact
+                  />
+                  <Route
+                    path={`${ROUTES.ORDER_SPEC}/:id`}
+                    children={<OrderSpecPage />}
+                    exact
+                  />
+                  <Route path={ROUTES.HOME_PAGE} exact>
                     <WorkPage />
                   </Route>
                   <Route path="*">

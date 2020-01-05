@@ -1,7 +1,21 @@
 // ** 热量计算 ** //
 import React, { useState } from 'react';
-import { Form, InputNumber, Button, Statistic, Row, Col, Card } from 'antd';
-import { computeHolesCount, computeThroatDiameter } from '../helper';
+import {
+  Form,
+  InputNumber,
+  Button,
+  Statistic,
+  Row,
+  Col,
+  Card,
+  Slider,
+} from 'antd';
+import {
+  computeHolesCount,
+  computeThroatDiameter,
+  computeWaterDiameter,
+  computeCalorie,
+} from '../helper';
 
 // 千焦到千卡的转换系数
 const KJ_TO_KCAL = 4.184;
@@ -38,13 +52,11 @@ const HeatComputerBase = props => {
           steamEnthalpy,
         } = values;
         // 计算水管的直径
-        const waterDn = Math.ceil(
-          2 * Math.sqrt(((flow / 3600 / waterVelocity) * 1000000) / Math.PI)
-        );
+        const waterDn = computeWaterDiameter(flow, waterVelocity);
         setWaterDn(waterDn);
         console.log('水管直径', waterDn);
         // 计算水需要吸收的热量
-        const calorie = flow * 1000 * (heatTo - heatFrom);
+        const calorie = computeCalorie(flow, heatTo, heatFrom);
         setCalorie(calorie);
 
         // 喉径
@@ -57,9 +69,16 @@ const HeatComputerBase = props => {
     });
   };
 
+  const marks = {
+    1.0: '1.0 m/s',
+    1.5: '1.5 m/s',
+    2.0: '2.0 m/s',
+    2.5: '2.5 m/s',
+  };
+
   return (
     <div>
-      <Row gutter={10}>
+      <Row gutter={[32, 32]}>
         <Col span={8}>
           <Form
             onSubmit={onSubmit}
@@ -75,7 +94,7 @@ const HeatComputerBase = props => {
             <Form.Item label="水的经济流速">
               {getFieldDecorator('waterVelocity', {
                 initialValue: 1.5,
-              })(<InputNumber step={0.1} />)}
+              })(<Slider min={1.0} max={2.5} marks={marks} step={0.5} />)}
             </Form.Item>
             <Form.Item label="进水温度 °C">
               {getFieldDecorator('heatFrom', {

@@ -7,6 +7,14 @@ const STANDARD_HOLES_COUNT = 720;
 // QSH-48 对应的蒸汽流量 单位 kg/h
 const STANDARD_STEAM_FLOW = 16724.99;
 
+// 计算水管的直径
+export const computeWaterDiameter = (flow, waterVelocity) =>
+  Math.ceil(2 * Math.sqrt(((flow / 3600 / waterVelocity) * 1000000) / Math.PI));
+
+// 计算水需要吸收的热量
+export const computeCalorie = (flow, heatTo, heatFrom) =>
+  flow * 1000 * (heatTo - heatFrom);
+
 // 计算喉部直径
 export const computeThroatDiameter = flow =>
   Math.ceil(2 * Math.sqrt((1000000 * flow) / 3600 / VELOCITY / Math.PI));
