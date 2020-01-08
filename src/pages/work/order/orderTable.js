@@ -1,6 +1,6 @@
 // ** 合同列表页面 ** //
-import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React from "react";
+import { Link, useHistory } from "react-router-dom";
 import {
   Table,
   Divider,
@@ -9,9 +9,9 @@ import {
   List,
   Icon,
   Typography,
-  Tag,
-} from 'antd';
-import * as ROUTES from 'constants/routes';
+  Tag
+} from "antd";
+import * as ROUTES from "constants/routes";
 
 const { Column } = Table;
 const { Text } = Typography;
@@ -24,9 +24,42 @@ const OrderTable = props => {
     onRemoveOrder,
     onToggleNameplatePrint,
     onToggleCertificatePrint,
+    createCertificates,
+    removeCertificates
   } = props;
 
   const goCreateOrder = () => history.push(ROUTES.CREATE_ORDER);
+
+  const handleCertificateChange = async (record, checked) => {
+    const {
+      id,
+      products,
+      date: { arrivalAt }
+    } = record;
+    await onToggleCertificatePrint(id, checked);
+    checked ? console.log("已打印") : console.log("未打印");
+    // firestore 对于元素类型为对象的数组支持比较差
+    // 为了适应 firestore 的数据结构，将 products 转化成对象结构
+    const productsInfo = {};
+    products.forEach(product => {
+      const { name, quantity, model } = product;
+      productsInfo[name] = {
+        model,
+        quantity
+      };
+    });
+    const certificateInfo = {
+      arrivalAt, // 用作检验日期
+      orderId: id, // 对应的订单 id
+      products: productsInfo,
+      printDone: false, // 是否已打印
+      preparePrintAt: Date.now(), // 准备打印日期
+    };
+    // 选中则新建该订单下所有产品的合格证，不选中则删除该订单下所有产品的合格证
+    checked
+      ? await createCertificates(id, certificateInfo)
+      : await removeCertificates(id);
+  };
 
   return (
     <div>
@@ -36,7 +69,7 @@ const OrderTable = props => {
       <Table
         dataSource={orders}
         rowKey={record => record.id}
-        pagination={{ position: 'top' }}
+        pagination={{ position: "top" }}
         size="middle"
       >
         <Column
@@ -47,7 +80,7 @@ const OrderTable = props => {
             <Link
               to={{
                 pathname: `${ROUTES.WORK_ORDER}/${record.id}`,
-                state: record,
+                state: record
               }}
             >
               <List
@@ -89,8 +122,8 @@ const OrderTable = props => {
           dataIndex="nameplate"
           key="nameplate"
           filters={[
-            { text: '已打印', value: true },
-            { text: '未打印', value: false },
+            { text: "已打印", value: true },
+            { text: "未打印", value: false }
           ]}
           onFilter={(value, record) => record.nameplate === value}
           render={(text, record) => (
@@ -108,14 +141,14 @@ const OrderTable = props => {
           dataIndex="certificate"
           key="certificate"
           filters={[
-            { text: '已打印', value: true },
-            { text: '未打印', value: false },
+            { text: "已打印", value: true },
+            { text: "未打印", value: false }
           ]}
           onFilter={(value, record) => record.certificate === value}
           render={(text, record) => (
             <Switch
               checked={record.certificate}
-              onChange={checked => onToggleCertificatePrint(record.id, checked)}
+              onChange={checked => handleCertificateChange(record, checked)}
               checkedChildren={<Icon type="check" />}
               unCheckedChildren={<Icon type="close" />}
               defaultChecked

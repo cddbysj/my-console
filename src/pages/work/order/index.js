@@ -29,6 +29,12 @@ const WorkPage = props => {
     await firebase.toggleCertificatePrint(id, checked);
   };
 
+  const createCertificates = async (id, certificateInfo) => {
+    await firebase.createCertificates(id, certificateInfo);
+  };
+
+  const removeCertificates = async id => await firebase.removeCertificates(id);
+
   return (
     <div>
       {orders ? (
@@ -37,6 +43,8 @@ const WorkPage = props => {
           onRemoveOrder={removeOrder}
           onToggleNameplatePrint={toggleNameplatePrint}
           onToggleCertificatePrint={toggleCertificatePrint}
+          createCertificates={createCertificates}
+          removeCertificates={removeCertificates}
         />
       ) : (
         <Spin />

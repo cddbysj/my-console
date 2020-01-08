@@ -1,0 +1,33 @@
+#main {
+  margin-left: 200px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 0 10px;
+  margin: 0 10px;
+}
+
+@page {
+  size: A4;
+}
+
+@media print {
+  #main {
+    margin: 0;
+  }
+
+  .noPrint {
+    display: none;
+  }
+
+  aside {
+    display: none;
+  }
+
+  header {
+    display: none;
+  }
+}

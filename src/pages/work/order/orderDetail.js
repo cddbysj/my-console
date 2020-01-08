@@ -1,6 +1,6 @@
 // ** 产品详情页 ** //
-import React from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import React from "react";
+import { useLocation, Link } from "react-router-dom";
 import {
   Descriptions,
   Typography,
@@ -8,12 +8,12 @@ import {
   Collapse,
   Row,
   Col,
-  Empty,
-} from 'antd';
-import * as ROUTES from 'constants/routes';
-import * as PRODUCT from 'constants/product';
-import { computeHolesCount, computeThroatDiameter } from '../helper';
-import styles from './orderDetail.module.css';
+  Empty
+} from "antd";
+import * as ROUTES from "constants/routes";
+import * as PRODUCT from "constants/product";
+import { computeHolesCount, computeThroatDiameter } from "../helper";
+import styles from "./orderDetail.module.css";
 
 const { Text, Title, Paragraph } = Typography;
 const { Panel } = Collapse;
@@ -23,7 +23,7 @@ const OrderDetailPage = () => {
     id,
     consumer,
     products,
-    date: { orderAt, arrivalAt },
+    date: { orderAt, arrivalAt }
   } = useLocation().state;
 
   const arrivalMonth = arrivalAt.slice(0, 7);
@@ -39,7 +39,7 @@ const OrderDetailPage = () => {
       pressure,
       flangeStandard,
       material,
-      model,
+      model
     } = product;
 
     // 喉部直径由流量推算出
@@ -50,21 +50,21 @@ const OrderDetailPage = () => {
     // 根据产品型号推算三个口径，特殊型号后续自行修改
     // HQS-125-20G --> ['HQS', 125, 20, 'G']
     // HJ-50C --> ['HJ', '50C']
-    const prefix = name.split('-')[0];
+    const prefix = name.split("-")[0];
     const dn =
-      model === 'HQS'
-        ? `DN${name.split('-')[1]}`
-        : `DN${name.split('-')[1].slice(0, name.split('-')[1].length - 1)}`;
+      model === "HQS"
+        ? `DN${name.split("-")[1]}`
+        : `DN${name.split("-")[1].slice(0, name.split("-")[1].length - 1)}`;
     const dnInlet = dn; // 进水口径
     const dnOutlet = dn; // 出水口径
-    const dnSteam = prefix === 'JRG' ? `DN150` : dn; // 蒸汽口径
+    const dnSteam = prefix === "JRG" ? `DN150` : dn; // 蒸汽口径
 
     // 生产编号
-    const serialNumber = `${orderAt.replace(/-/g, '')}01`;
+    const serialNumber = `${orderAt.replace(/-/g, "")}01`;
 
     // 产品单价
     const price =
-      model === 'HQS'
+      model === "HQS"
         ? PRODUCT.HQS_MATRIX[material][dn]
         : PRODUCT.HJ_MATRIX[material][dn];
 
@@ -81,7 +81,7 @@ const OrderDetailPage = () => {
 `;
     // 合同内单类别产品信息
     const contractItemText =
-      model === 'HQS'
+      model === "HQS"
         ? `法兰标准：${flangeStandard}。材质 ${material}，进水侧口径 ${dnInlet}，出水侧口径 ${dnOutlet}，蒸汽侧口径 ${dnSteam}，喉径 ${throatDiameter}mm，斜孔数 ${holesCount}，斜孔直径 3.5mm，角度与水平线成 30℃。`
         : `法兰标准：${flangeStandard}。材质 ${material}，口径 ${dn}`;
 
@@ -96,11 +96,11 @@ const OrderDetailPage = () => {
       price,
       serialNumber,
       nameplateText,
-      contractItemText,
+      contractItemText
     };
   });
 
-  // 传给技术参数页面的属性，仅传递 id 以及与技术参数相关属性
+  // 传递给技术参数页面的属性，仅传递 id 以及与技术参数相关属性
   const propsPassToSpecPage = {
     id,
     products: products.map(
@@ -119,7 +119,7 @@ const OrderDetailPage = () => {
         dnInlet,
         dnOutlet,
         dnSteam,
-        material,
+        material
       }) => ({
         name,
         flow,
@@ -135,9 +135,20 @@ const OrderDetailPage = () => {
         dnInlet,
         dnOutlet,
         dnSteam,
-        material,
+        material
       })
-    ),
+    )
+  };
+
+  // 传递给合格证页面的属性
+  const propsPassToCertificatePage = {
+    id,
+    arrivalAt,
+    products: products.map(({ name, model, quantity }) => ({
+      name,
+      model,
+      quantity
+    }))
   };
 
   return (
@@ -152,7 +163,7 @@ const OrderDetailPage = () => {
           <Collapse
             expandIconPosition="right"
             bordered={false}
-            defaultActiveKey={['dn']}
+            defaultActiveKey={["dn"]}
           >
             {products.map(product => (
               <Panel
@@ -184,7 +195,7 @@ const OrderDetailPage = () => {
           <Collapse
             expandIconPosition="right"
             bordered={false}
-            defaultActiveKey={['purchaseTitle']}
+            defaultActiveKey={["purchaseTitle"]}
           >
             <Panel
               className={styles.collapsePanel}
@@ -192,10 +203,10 @@ const OrderDetailPage = () => {
               key="purchaseTitle"
             >
               <Paragraph copyable>
-                {consumer}{' '}
+                {consumer}{" "}
                 {products
                   .map(product => `${product.name} ${product.quantity} 台 `)
-                  .join('')}
+                  .join("")}
               </Paragraph>
             </Panel>
             <Panel
@@ -221,16 +232,16 @@ const OrderDetailPage = () => {
           </Collapse>
         </Col>
       </Row>
-      <Row gutter={[8, 80]} style={{ background: '#fafafa', width: '100%' }}>
+      <Row gutter={[8, 80]} style={{ background: "#fafafa", width: "100%" }}>
         <Col span={6}>
           <Title level={4} type="secondary">
             铭牌
           </Title>
         </Col>
         <Col span={18}>
-          {products.filter(product => product.model === 'HQS').length ? (
+          {products.filter(product => product.model === "HQS").length ? (
             products
-              .filter(product => product.model === 'HQS')
+              .filter(product => product.model === "HQS")
               .map(product => (
                 <Descriptions
                   key={product.name}
@@ -287,7 +298,7 @@ const OrderDetailPage = () => {
               <Link
                 to={{
                   pathname: `${ROUTES.ORDER_CONTRACT}/${id}`,
-                  state: { id, products, date: { orderAt, arrivalAt } },
+                  state: { id, products, date: { orderAt, arrivalAt } }
                 }}
               >
                 <Button type="link" icon="right-square">
@@ -297,7 +308,7 @@ const OrderDetailPage = () => {
               <Link
                 to={{
                   pathname: `${ROUTES.CERTIFICATE_PAGE}/${id}`,
-                  state: propsPassToSpecPage,
+                  state: propsPassToCertificatePage
                 }}
               >
                 <Button type="link" icon="right-square">
@@ -307,7 +318,7 @@ const OrderDetailPage = () => {
               <Link
                 to={{
                   pathname: `${ROUTES.ORDER_SPEC}/${id}`,
-                  state: propsPassToSpecPage,
+                  state: propsPassToSpecPage
                 }}
               >
                 <Button type="link" icon="right-square">

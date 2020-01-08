@@ -1,22 +1,23 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { Layout, Menu, Icon, Result } from 'antd';
-import useAuth from './hooks/useAuth';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Layout, Menu, Icon, Result } from "antd";
+import useAuth from "./hooks/useAuth";
 
-import LoginForm from './components/signIn';
-import WorkFlowPage from './pages/work/flow';
-import CreateOrderForm from './pages/work/order/createOrderForm';
-import JrqProduct from './pages/work/jrq';
-import WkProduct from './pages/work/wk';
-import WorkPage from './pages/work/order';
-import MyPage from './pages/my';
-import Todo from './pages/todo';
-import FamilyPage from './pages/family';
-import OrderDetailPage from './pages/work/order/orderDetail';
-import ContractPage from './pages/work/order/contract';
-import OrderSpecPage from './pages/work/order/orderSpec';
-import CertificatePage from './pages/work/order/certificate';
-import * as ROUTES from 'constants/routes';
+import LoginForm from "./components/signIn";
+import WorkFlowPage from "./pages/work/flow";
+import CreateOrderForm from "./pages/work/order/createOrderForm";
+import JrqProduct from "./pages/work/jrq";
+import WkProduct from "./pages/work/wk";
+import WorkPage from "./pages/work/order";
+import MyPage from "./pages/my";
+import Todo from "./pages/todo";
+import FamilyPage from "./pages/family";
+import OrderDetailPage from "./pages/work/order/orderDetail";
+import ContractPage from "./pages/work/order/contract";
+import OrderSpecPage from "./pages/work/order/orderSpec";
+import CertificatePage from "./pages/work/order/certificate";
+import CertificatesManagePage from "./pages/work/order/certificatesManage";
+import * as ROUTES from "constants/routes";
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -29,17 +30,17 @@ function App() {
       <Layout>
         <Sider
           style={{
-            overflow: 'auto',
-            height: '100vh',
-            position: 'fixed',
-            left: 0,
+            overflow: "auto",
+            height: "100vh",
+            position: "fixed",
+            left: 0
           }}
         >
           <div className="logo" />
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={['order-table']}
+            defaultSelectedKeys={["order-table"]}
           >
             <SubMenu
               key="work"
@@ -66,6 +67,12 @@ function App() {
                 <Link to={ROUTES.WORK_ORDERS}>
                   <Icon type="table" />
                   订单
+                </Link>
+              </Menu.Item>
+              <Menu.Item key="certificates">
+                <Link to={ROUTES.WORK_CERTIFICATES}>
+                  <Icon type="file-image" />
+                  合格证
                 </Link>
               </Menu.Item>
               <Menu.Item key="jrq">
@@ -100,20 +107,12 @@ function App() {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout style={{ marginLeft: 200 }}>
-          <Header
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              background: '#fff',
-              padding: '0 10px',
-              margin: '0 10px',
-            }}
-          >
+        <Layout id="main">
+          <Header className={["header", "noPrint"]}>
             <LoginForm />
           </Header>
-          <Content style={{ margin: '10px 10px 0', overflow: 'initial' }}>
-            <div style={{ padding: 24, background: '#fff' }}>
+          <Content style={{ margin: "10px 10px 0" }}>
+            <div style={{ padding: 24, background: "#fff" }}>
               {auth ? (
                 <Switch>
                   <Route path={ROUTES.WORK_FLOW} exact>
@@ -124,6 +123,9 @@ function App() {
                   </Route>
                   <Route path={ROUTES.WORK_ORDERS} exact>
                     <WorkPage />
+                  </Route>
+                  <Route path={ROUTES.WORK_CERTIFICATES} exact>
+                    <CertificatesManagePage />
                   </Route>
                   <Route path={ROUTES.WORK_JRQ} exact>
                     <JrqProduct />

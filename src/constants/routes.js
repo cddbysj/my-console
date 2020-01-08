@@ -12,6 +12,8 @@ export const WORK_ORDER = '/work/order';
 export const ORDER_DETAIL = '/work/order/:id';
 // 订单合同页面
 export const ORDER_CONTRACT = '/work/order/contract';
+// 合格证统一管理页面
+export const WORK_CERTIFICATES = '/work/certificates';
 // 合格证页面，由数据直接生成可打印的合格证
 export const CERTIFICATE_PAGE = '/work/order/certificate';
 // 订单技术参数页面
