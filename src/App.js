@@ -27,85 +27,81 @@ function App() {
   return (
     <Router>
       <Layout>
-        <Sider
-          style={{
-            overflow: "auto",
-            height: "100vh",
-            position: "fixed",
-            left: 0
-          }}
-        >
-          <div className="logo" />
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={["order-table"]}
+        {auth ? (
+          <Sider
+            style={{
+              overflow: "auto",
+              height: "100vh",
+              position: "fixed",
+              left: 0
+            }}
           >
-            <SubMenu
-              key="work"
-              title={
-                <Link to="/work">
-                  <Icon type="windows" />
-                  工作
-                </Link>
-              }
+            <div className="logo" />
+            <Menu
+              theme="dark"
+              mode="inline"
+              defaultSelectedKeys={["order-table"]}
             >
-              <Menu.Item key="work-flow">
-                <Link to={ROUTES.WORK_FLOW}>
-                  <Icon type="rocket" />
-                  工作流
+              <SubMenu
+                key="work"
+                title={
+                  <Link to="/work">
+                    <Icon type="windows" />
+                    工作
+                  </Link>
+                }
+              >
+                <Menu.Item key="work-flow">
+                  <Link to={ROUTES.WORK_FLOW}>
+                    <Icon type="rocket" />
+                    工作流
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="create-order">
+                  <Link to={ROUTES.CREATE_ORDER}>
+                    <Icon type="file-add" />
+                    新建订单
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="order-table">
+                  <Link to={ROUTES.WORK_ORDERS}>
+                    <Icon type="table" />
+                    订单
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="certificates">
+                  <Link to={ROUTES.WORK_CERTIFICATES}>
+                    <Icon type="file-image" />
+                    合格证
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="jrq">
+                  <Link to={ROUTES.WORK_JRQ}>
+                    <Icon type="file" />
+                    加热器
+                  </Link>
+                </Menu.Item>
+                <Menu.Item key="wk">
+                  <Link to={ROUTES.WORK_WK}>
+                    <Icon type="file" />
+                    温控
+                  </Link>
+                </Menu.Item>
+              </SubMenu>
+              <Menu.Item key="my">
+                <Link to={ROUTES.MY_PAGE}>
+                  <Icon type="project" />
+                  个人事务
                 </Link>
               </Menu.Item>
-              <Menu.Item key="create-order">
-                <Link to={ROUTES.CREATE_ORDER}>
-                  <Icon type="file-add" />
-                  新建订单
+              <Menu.Item key="family">
+                <Link to={ROUTES.FAMILY_PAGE}>
+                  <Icon type="home" />家
                 </Link>
               </Menu.Item>
-              <Menu.Item key="order-table">
-                <Link to={ROUTES.WORK_ORDERS}>
-                  <Icon type="table" />
-                  订单
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="certificates">
-                <Link to={ROUTES.WORK_CERTIFICATES}>
-                  <Icon type="file-image" />
-                  合格证
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="jrq">
-                <Link to={ROUTES.WORK_JRQ}>
-                  <Icon type="file" />
-                  加热器
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="wk">
-                <Link to={ROUTES.WORK_WK}>
-                  <Icon type="file" />
-                  温控
-                </Link>
-              </Menu.Item>
-            </SubMenu>
-            <Menu.Item key="my">
-              <Link to={ROUTES.MY_PAGE}>
-                <Icon type="project" />
-                个人事务
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="family">
-              <Link to={ROUTES.FAMILY_PAGE}>
-                <Icon type="home" />家
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="todos">
-              <Link to="/todos">
-                <Icon type="home" />
-                todos
-              </Link>
-            </Menu.Item>
-          </Menu>
-        </Sider>
+            </Menu>
+          </Sider>
+        ) : null}
         <Layout id="main">
           <Header className={["header", "noPrint"]}>
             <LoginForm />

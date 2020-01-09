@@ -100,45 +100,42 @@ const OrderDetailPage = () => {
     };
   });
 
-  // 传递给技术参数页面的属性，仅传递 id 以及与技术参数相关属性
-  const propsPassToSpecPage = {
-    id,
-    products: products.map(
-      ({
-        name,
-        flow,
-        heatFrom,
-        heatTo,
-        quantity,
-        weight,
-        pressure,
-        flangeStandard,
-        model,
-        throatDiameter,
-        holesCount,
-        dnInlet,
-        dnOutlet,
-        dnSteam,
-        material
-      }) => ({
-        name,
-        flow,
-        heatFrom,
-        heatTo,
-        quantity,
-        weight,
-        pressure,
-        flangeStandard,
-        model,
-        throatDiameter,
-        holesCount,
-        dnInlet,
-        dnOutlet,
-        dnSteam,
-        material
-      })
-    )
-  };
+  // 传递给技术参数页面的属性，仅传递与技术参数相关属性
+  const propsPassToSpecPage = products.map(
+    ({
+      name,
+      flow,
+      heatFrom,
+      heatTo,
+      quantity,
+      weight,
+      pressure,
+      flangeStandard,
+      model,
+      throatDiameter,
+      holesCount,
+      dnInlet,
+      dnOutlet,
+      dnSteam,
+      material
+    }) => ({
+      name,
+      flow,
+      heatFrom,
+      heatTo,
+      quantity,
+      weight,
+      pressure,
+      flangeStandard,
+      model,
+      throatDiameter,
+      holesCount,
+      dnInlet,
+      dnOutlet,
+      dnSteam,
+      material
+    })
+  );
 
   // 传递给合格证页面的属性
   const propsPassToCertificatePage = {
