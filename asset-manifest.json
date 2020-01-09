@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/my-console/static/css/main.f76572c5.chunk.css",
-    "main.js": "/my-console/static/js/main.df2c1e97.chunk.js",
-    "main.js.map": "/my-console/static/js/main.df2c1e97.chunk.js.map",
+    "main.js": "/my-console/static/js/main.daf5f87d.chunk.js",
+    "main.js.map": "/my-console/static/js/main.daf5f87d.chunk.js.map",
     "runtime-main.js": "/my-console/static/js/runtime-main.1894d28d.js",
     "runtime-main.js.map": "/my-console/static/js/runtime-main.1894d28d.js.map",
     "static/css/2.79c97804.chunk.css": "/my-console/static/css/2.79c97804.chunk.css",
     "static/js/2.7e3bb650.chunk.js": "/my-console/static/js/2.7e3bb650.chunk.js",
     "static/js/2.7e3bb650.chunk.js.map": "/my-console/static/js/2.7e3bb650.chunk.js.map",
     "index.html": "/my-console/index.html",
-    "precache-manifest.66b41e0c01dc56562b5ae0b1731a12df.js": "/my-console/precache-manifest.66b41e0c01dc56562b5ae0b1731a12df.js",
+    "precache-manifest.c61da528c9a3713ad0ee440f9934ccec.js": "/my-console/precache-manifest.c61da528c9a3713ad0ee440f9934ccec.js",
     "service-worker.js": "/my-console/service-worker.js",
     "static/css/2.79c97804.chunk.css.map": "/my-console/static/css/2.79c97804.chunk.css.map",
     "static/css/main.f76572c5.chunk.css.map": "/my-console/static/css/main.f76572c5.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.79c97804.chunk.css",
     "static/js/2.7e3bb650.chunk.js",
     "static/css/main.f76572c5.chunk.css",
-    "static/js/main.df2c1e97.chunk.js"
+    "static/js/main.daf5f87d.chunk.js"
   ]
 }
