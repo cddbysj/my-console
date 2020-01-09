@@ -1,27 +1,27 @@
 // ** 合同页面，由数据自动生成 ** //
-import React from "react";
-import { useLocation } from "react-router-dom";
-import { Divider, Typography, Col, Row, Card, Table } from "antd";
-import "./contract.module.css";
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { Divider, Typography, Col, Row, Card, Table } from 'antd';
+import styles from './contract.module.css';
 
 const { Text, Title } = Typography;
 const { Column } = Table;
 
 // 加热器结构形式和符号的映射
 const modelMap = {
-  HJ: "浸没式加热器",
-  HQS: "管道式加热器"
+  HJ: '浸没式加热器',
+  HQS: '管道式加热器',
 };
 
 const ContractPage = () => {
   let {
     products,
-    date: { orderAt }
+    date: { orderAt },
   } = useLocation().state;
 
   products = products.map(product => ({
     ...product,
-    totalPrice: product.quantity * product.price
+    totalPrice: product.quantity * product.price,
   }));
 
   // 订单内产品总数量
@@ -37,34 +37,34 @@ const ContractPage = () => {
   const contractNumber = `${orderAt}01`;
   // 汉化日期
   const sinicizationDate = orderAt => {
-    const year = orderAt.split("-")[0];
-    const month = orderAt.split("-")[1];
-    const day = orderAt.split("-")[2];
+    const year = orderAt.split('-')[0];
+    const month = orderAt.split('-')[1];
+    const day = orderAt.split('-')[2];
     return {
       contractStartAt: `${year} 年 ${month} 月 ${day} 日`,
-      contractEndAt: `${+year + 1} 年 ${month} 月 ${day} 日`
+      contractEndAt: `${+year + 1} 年 ${month} 月 ${day} 日`,
     };
   };
   // 合同签订和到期时间
   const { contractStartAt, contractEndAt } = sinicizationDate(orderAt);
 
   return (
-    <div className="contract-panel">
-      <div className="contract-secondary">
+    <div className={styles.contractPanel}>
+      <div className={styles.contractSecondary}>
         <Text type="secondary">SEMEM</Text>
         <Text type="secondary">合同文本</Text>
       </div>
       <Divider />
-      <div className="contract-title">
+      <div className={styles.contractTitle}>
         <Title level={1}>湖南西门机电科技有限公司</Title>
         <Title level={4}>产品采购合同</Title>
         <p>合同编号：{contractNumber}</p>
-        <p className="contract-companies">
+        <p className={styles.contractCompanies}>
           <Text strong>供方：长沙南风机电设备有限公司</Text>
           <Text strong>需方：湖南西门机电科技有限公司</Text>
         </p>
       </div>
-      <section className="contract-items">
+      <section className={styles.contractItems}>
         <div>
           <p>一、产品信息</p>
           <Table
@@ -89,10 +89,10 @@ const ContractPage = () => {
               dataIndex="name"
               key="name"
               render={(text, record) => {
-                const s = text.split("-");
+                const s = text.split('-');
                 // HQS-65-7C --> ['HQS', '65', '7C']
                 // HJ-40C --> ['HJ', '40C']
-                if (record.model === "HJ") return `DN${s[1]}`;
+                if (record.model === 'HJ') return `DN${s[1]}`;
                 return `DN${s[1]}-${s[2]}`;
               }}
             />
@@ -122,7 +122,7 @@ const ContractPage = () => {
         <p>七、如需提供担保，另立合同担保书，作为本合同附件：无。</p>
         <p>八、违约责任：按《质量协议书》执行。</p>
       </section>
-      <section className="contract-payment">
+      <section className={styles.contractPayment}>
         <Row>
           <Col span={12}>
             <Card title="供方">

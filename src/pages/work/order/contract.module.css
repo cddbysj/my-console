@@ -1,20 +1,20 @@
-.contract-panel {
+.contractPanel {
   padding: 10px 100px;
 }
-.contract-secondary {
+.contractSecondary {
   display: flex;
   justify-content: space-between;
 }
-.contract-title {
+.contractTitle {
   text-align: center;
 }
-.contract-companies {
+.contractCompanies {
   display: flex;
   justify-content: space-around;
 }
-.contract-items {
+.contractItems {
   text-align: left;
 }
-.contract-payment {
+.contractPayment {
   border: 1px solid #cccccc;
 }
