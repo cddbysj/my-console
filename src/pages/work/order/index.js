@@ -8,7 +8,6 @@ const WorkPage = props => {
 
   useEffect(() => {
     const unsubscribe = firebase.orders().onSnapshot(snapshot => {
-      console.log("snapshot", snapshot);
       const orders = [];
       // doc.data() 得到的仅仅是用于展示目的的数据，拼接 id 属性进去，利于后续操作单个对应的订单
       snapshot.forEach(doc => orders.push({ ...doc.data(), id: doc.id }));

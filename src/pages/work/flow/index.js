@@ -1,9 +1,8 @@
 // ** 工作流程页面 ** //
 import React, { useState } from "react";
-import { Steps, Button, message } from "antd";
+import { Steps } from "antd";
 
 import Params from "./params";
-import ContractPanel from "./contractPanel";
 
 const { Step } = Steps;
 
@@ -14,7 +13,7 @@ const steps = [
   },
   {
     title: "制作采购合同",
-    content: <ContractPanel />
+    content: "制作采购合同"
   },
   {
     title: "发送采购合同",

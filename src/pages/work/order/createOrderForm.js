@@ -22,13 +22,14 @@ const { RangePicker } = DatePicker;
 
 const CreateOrderFormBase = props => {
   const history = useHistory();
-  const [items, setItems] = useState([{ isHj: false }]);
+  // 用于动态增删产品
+  const [items, setItems] = useState([0]);
 
   const {
     form: { getFieldDecorator, validateFieldsAndScroll }
   } = props;
 
-  const addItem = () => setItems(prev => [...prev, { isHj: false }]);
+  const addItem = () => setItems(prev => [...prev, 0]);
   const removeItem = () => setItems(prev => prev.slice(0, prev.length - 1));
 
   const onSubmit = e => {
@@ -52,6 +53,7 @@ const CreateOrderFormBase = props => {
           certificate: false,
           products
         };
+        console.log("order: ", order);
         // api
         firebase
           .createOrder(order)

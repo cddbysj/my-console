@@ -11,7 +11,6 @@ const CertificatePage = () => {
 
   useEffect(() => {
     const unsubscribe = firebase.certificates().onSnapshot(snapshot => {
-      console.log("snapshot", snapshot);
       const certificates = [];
       snapshot.forEach(doc => certificates.push({ ...doc.data(), id: doc.id }));
       setCertificates(certificates);
@@ -22,17 +21,6 @@ const CertificatePage = () => {
   const onPrint = () => {
     window.print();
   };
-
-  const completProduct = {
-    name: "HJ-50C",
-    model: "HJ",
-    arrivalAt
-  };
-
-  const cards = Array.from(new Array(7), (val, index) => ({
-    ...completProduct,
-    id: completProduct.name + index
-  }));
 
   return (
     <div>

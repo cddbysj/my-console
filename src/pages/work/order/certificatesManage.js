@@ -15,7 +15,8 @@ import {
   Tooltip,
   Input,
   InputNumber,
-  DatePicker
+  DatePicker,
+  message
 } from "antd";
 import firebase from "api/firebase";
 import styles from "./certificate.module.css";
@@ -34,7 +35,8 @@ const CertificatesManagePage = props => {
   // 用于展示的合格证卡片信息
   const [certificates, setCertificates] = useState(null);
   // 合格证卡片队列，一次最多打印 9 个。
-  const [cardQueue, setCardQueue] = useState([]);
+  const initialCardQueue = JSON.parse(localStorage.getItem("cardQueue")) || [];
+  const [cardQueue, setCardQueue] = useState(initialCardQueue);
 
   useEffect(() => {
     const unsubscribe = firebase.certificates().onSnapshot(snapshot => {
@@ -61,16 +63,19 @@ const CertificatesManagePage = props => {
       });
 
       setCertificates(certificates);
+      localStorage.setItem("cardQueue", JSON.stringify(cardQueue));
     });
     return unsubscribe;
-  }, []);
+  }, [cardQueue]);
 
+  // 调用 Web API 启用打印机
   const onPrint = () => {
     window.print();
   };
 
-  const showDetail = card => {
-    console.log(card);
+  // 清空添加到打印队列的合格证
+  const onClearAll = () => {
+    setCardQueue([]);
   };
 
   const addToCardQueue = async card => {
@@ -84,17 +89,27 @@ const CertificatesManagePage = props => {
       if (!errors) {
         //
         console.log("received values: ", values);
+        const { arrivalAt } = values;
+        setCardQueue(prev => [
+          { ...values, arrivalAt: arrivalAt.format("YYYY-MM") },
+          ...prev
+        ]);
+        message.success("添加合格证成功", 0.5);
       } else {
-        console.log("sth wrong!");
+        message.error("添加合格证失败", 2);
       }
     });
+  };
+
+  const removeCard = cardName => {
+    console.log("remove card");
+    setCardQueue(prev => prev.filter(card => card.name !== cardName));
   };
 
   return (
     <Tabs defaultActiveKey="plan">
       <TabPane tab="计划" key="plan">
         <div className={cx("noPrint", "planArea")}>
-          <h1>合格证页面，由数据直接生成可打印的合格证</h1>
           <p>
             备注：产品的合格证是以一个订单为基本单位，同一订单内的所有产品合格证应该同时被添加到打印队列，同时完成打印，以及同时被删除。
           </p>
@@ -142,21 +157,31 @@ const CertificatesManagePage = props => {
       </TabPane>
       <TabPane tab="预览" key="preview">
         <div className={cx("noPrint", "cardActions")}>
-          <Button icon="printer" type="primary" onClick={onPrint}>
-            打印
-          </Button>
+          <Button.Group>
+            <Button icon="printer" type="primary" onClick={onPrint}>
+              打印
+            </Button>
+            <Button icon="delete" type="danger" onClick={onClearAll}>
+              清空
+            </Button>
+          </Button.Group>
         </div>
         {cardQueue.length ? (
           <div className={styles.cardArea}>
             {cardQueue.map(card =>
               Array.from(new Array(card.quantity)).map((item, index) => (
-                <div
-                  key={`${card.name}-${card.arrivalAt}-${index}`}
-                  onClick={() => showDetail(card)}
-                >
+                <div key={`${card.name}-${card.arrivalAt}-${index}`}>
                   <div className={styles.container}>
                     <section className={styles.cardHeader}>
-                      <p className={styles.title}>SEMEM</p>
+                      <p className={styles.title}>
+                        <span>SEMEM</span>
+                        <Button
+                          ghost
+                          className={styles.noPrint}
+                          icon="minus"
+                          onClick={() => removeCard(card.name)}
+                        />
+                      </p>
                       <p>
                         {card.model === "HQS"
                           ? card.name.slice(0, 3)
@@ -201,15 +226,19 @@ const CertificatesManagePage = props => {
                   message: "请输入产品名称"
                 }
               ]
-            })(<Input />)}
+            })(<Input allowClear autoFocus />)}
           </Form.Item>
           <Form.Item label="数量">
             {getFieldDecorator("quantity", {
-              initialValue: 1
+              initialValue: 1,
+              rules: [{ required: true, message: "请指定数量" }]
             })(<InputNumber min={1} max={9} />)}
           </Form.Item>
           <Form.Item label="结构形式">
-            {getFieldDecorator("model", { initialValue: "HJ" })(<Input />)}
+            {getFieldDecorator("model", {
+              initialValue: "HJ",
+              rules: [{ required: true, message: "请指定结构" }]
+            })(<Input />)}
           </Form.Item>
           <Form.Item label="检验日期">
             {getFieldDecorator("arrivalAt", {

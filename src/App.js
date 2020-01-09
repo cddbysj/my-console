@@ -10,7 +10,6 @@ import JrqProduct from "./pages/work/jrq";
 import WkProduct from "./pages/work/wk";
 import WorkPage from "./pages/work/order";
 import MyPage from "./pages/my";
-import Todo from "./pages/todo";
 import FamilyPage from "./pages/family";
 import OrderDetailPage from "./pages/work/order/orderDetail";
 import ContractPage from "./pages/work/order/contract";
@@ -138,9 +137,6 @@ function App() {
                   </Route>
                   <Route path={ROUTES.MY_PAGE}>
                     <MyPage />
-                  </Route>
-                  <Route path="/todos">
-                    <Todo />
                   </Route>
                   <Route path={ROUTES.FAMILY_PAGE}>
                     <FamilyPage />

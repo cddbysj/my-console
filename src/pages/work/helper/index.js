@@ -7,6 +7,9 @@ const STANDARD_HOLES_COUNT = 720;
 // QSH-48 对应的蒸汽流量 单位 kg/h
 const STANDARD_STEAM_FLOW = 16724.99;
 
+// 千焦到千卡的转换系数
+const KJ_TO_KCAL = 4.184;
+
 // 计算水管的直径
 export const computeWaterDiameter = (flow, waterVelocity) =>
   Math.ceil(2 * Math.sqrt(((flow / 3600 / waterVelocity) * 1000000) / Math.PI));
@@ -28,4 +31,24 @@ export const computeHolesCount = (flow, heatFrom, heatTo) => {
     STANDARD_STEAM_FLOW;
 
   return Math.ceil(result);
+};
+
+// 计算蒸汽耗量
+export const computeSteamCount = (calorie, steamEnthalpy, heatTo) =>
+  Math.ceil(calorie / (steamEnthalpy / KJ_TO_KCAL - heatTo));
+
+// 计算蒸汽管道直径
+export const computeSteamDiameter = (
+  steamCount, // 蒸汽耗量
+  steamSpecificHeatCapacity, // 蒸汽比热容
+  steamVelocity // 蒸汽经济流速 25 - 40 m/s 之间
+) => {
+  return Math.round(
+    2 *
+      Math.sqrt(
+        (1000000 *
+          ((steamCount * steamSpecificHeatCapacity) / 3600 / steamVelocity)) /
+          Math.PI
+      )
+  );
 };

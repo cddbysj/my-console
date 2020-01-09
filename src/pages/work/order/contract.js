@@ -1,27 +1,27 @@
 // ** 合同页面，由数据自动生成 ** //
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { Divider, Typography, Col, Row, Card, Table } from 'antd';
-import './contract.module.css';
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { Divider, Typography, Col, Row, Card, Table } from "antd";
+import "./contract.module.css";
 
 const { Text, Title } = Typography;
 const { Column } = Table;
 
 // 加热器结构形式和符号的映射
 const modelMap = {
-  HJ: '浸没式加热器',
-  HQS: '管道式加热器',
+  HJ: "浸没式加热器",
+  HQS: "管道式加热器"
 };
 
 const ContractPage = () => {
   let {
     products,
-    date: { orderAt, arrivalAt },
+    date: { orderAt }
   } = useLocation().state;
 
   products = products.map(product => ({
     ...product,
-    totalPrice: product.quantity * product.price,
+    totalPrice: product.quantity * product.price
   }));
 
   // 订单内产品总数量
@@ -37,12 +37,12 @@ const ContractPage = () => {
   const contractNumber = `${orderAt}01`;
   // 汉化日期
   const sinicizationDate = orderAt => {
-    const year = orderAt.split('-')[0];
-    const month = orderAt.split('-')[1];
-    const day = orderAt.split('-')[2];
+    const year = orderAt.split("-")[0];
+    const month = orderAt.split("-")[1];
+    const day = orderAt.split("-")[2];
     return {
       contractStartAt: `${year} 年 ${month} 月 ${day} 日`,
-      contractEndAt: `${+year + 1} 年 ${month} 月 ${day} 日`,
+      contractEndAt: `${+year + 1} 年 ${month} 月 ${day} 日`
     };
   };
   // 合同签订和到期时间
@@ -89,10 +89,10 @@ const ContractPage = () => {
               dataIndex="name"
               key="name"
               render={(text, record) => {
-                const s = text.split('-');
+                const s = text.split("-");
                 // HQS-65-7C --> ['HQS', '65', '7C']
                 // HJ-40C --> ['HJ', '40C']
-                if (record.model === 'HJ') return `DN${s[1]}`;
+                if (record.model === "HJ") return `DN${s[1]}`;
                 return `DN${s[1]}-${s[2]}`;
               }}
             />

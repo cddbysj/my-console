@@ -1,33 +1,33 @@
-import React from 'react';
-import { Table } from 'antd';
+import React from "react";
+import { Table } from "antd";
 
-const { Column, ColumnGroup } = Table;
+const { Column } = Table;
 
 const data = [
   {
     dn: 40,
     shellDn: 108,
     shellThickness: 5,
-    coreThickness: 4.5,
+    coreThickness: 4.5
   },
   {
     dn: 65,
     shellDn: 133,
     shellThickness: 6,
-    coreThickness: 4.5,
+    coreThickness: 4.5
   },
   {
     dn: 125,
     shellDn: 219,
     shellThickness: 6,
-    coreThickness: 4.5,
+    coreThickness: 4.5
   },
   {
     dn: 250,
     shellDn: 273,
     shellThickness: 8,
-    coreThickness: 6,
-  },
+    coreThickness: 6
+  }
 ];
 
 const HqsProduct = () => {

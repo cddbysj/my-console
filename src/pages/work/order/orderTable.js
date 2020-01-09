@@ -37,7 +37,6 @@ const OrderTable = props => {
       date: { arrivalAt }
     } = record;
     await onToggleCertificatePrint(id, checked);
-    checked ? console.log("已打印") : console.log("未打印");
     // firestore 对于元素类型为对象的数组支持比较差
     // 为了适应 firestore 的数据结构，将 products 转化成对象结构
     const productsInfo = {};

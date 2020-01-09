@@ -1,11 +1,11 @@
-import React from 'react';
-import { Card, Typography } from 'antd';
+import React from "react";
+import { Card, Typography } from "antd";
 
-const { Paragraph, Title, Text } = Typography;
+const { Paragraph, Title } = Typography;
 const gridStyle = {
-  width: '50%',
+  width: "50%",
   minHeight: 150,
-  textAlign: 'justify',
+  textAlign: "justify"
 };
 
 const TechInfo = () => (
