@@ -1,22 +1,22 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Layout, Menu, Icon, Result } from "antd";
-import useAuth from "./hooks/useAuth";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { Layout, Menu, Icon, Result } from 'antd';
+import useAuth from './hooks/useAuth';
 
-import LoginForm from "./components/signIn";
-import WorkFlowPage from "./pages/work/flow";
-import CreateOrderForm from "./pages/work/order/createOrderForm";
-import JrqProduct from "./pages/work/jrq";
-import WkProduct from "./pages/work/wk";
-import WorkPage from "./pages/work/order";
-import MyPage from "./pages/my";
-import FamilyPage from "./pages/family";
-import OrderDetailPage from "./pages/work/order/orderDetail";
-import ContractPage from "./pages/work/order/contract";
-import OrderSpecPage from "./pages/work/order/orderSpec";
-import CertificatePage from "./pages/work/order/certificate";
-import CertificatesManagePage from "./pages/work/order/certificatesManage";
-import * as ROUTES from "constants/routes";
+import LoginForm from './components/signIn';
+import WorkFlowPage from './pages/work/flow';
+import CreateOrderForm from './pages/work/order/createOrderForm';
+import JrqProduct from './pages/work/jrq';
+import WkProduct from './pages/work/wk';
+import WorkPage from './pages/work/order';
+import MyPage from './pages/my';
+import FamilyPage from './pages/family';
+import OrderDetailPage from './pages/work/order/orderDetail';
+import ContractPage from './pages/work/order/contract';
+import OrderSpecPage from './pages/work/order/orderSpec';
+import CertificatePage from './pages/work/order/certificate';
+import CertificatesManagePage from './pages/work/order/certificatesManage';
+import * as ROUTES from 'constants/routes';
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -25,22 +25,22 @@ function App() {
   const auth = useAuth();
 
   return (
-    <Router>
+    <Router basename="/my-console">
       <Layout>
         {auth ? (
           <Sider
             style={{
-              overflow: "auto",
-              height: "100vh",
-              position: "fixed",
-              left: 0
+              overflow: 'auto',
+              height: '100vh',
+              position: 'fixed',
+              left: 0,
             }}
           >
             <div className="logo" />
             <Menu
               theme="dark"
               mode="inline"
-              defaultSelectedKeys={["order-table"]}
+              defaultSelectedKeys={['order-table']}
             >
               <SubMenu
                 key="work"
@@ -103,11 +103,11 @@ function App() {
           </Sider>
         ) : null}
         <Layout id="main">
-          <Header className={["header", "noPrint"]}>
+          <Header className={['header', 'noPrint']}>
             <LoginForm />
           </Header>
-          <Content style={{ margin: "10px 10px 0" }}>
-            <div style={{ padding: 24, background: "#fff" }}>
+          <Content style={{ margin: '10px 10px 0' }}>
+            <div style={{ padding: 24, background: '#fff' }}>
               {auth ? (
                 <Switch>
                   <Route path={ROUTES.WORK_FLOW} exact>
