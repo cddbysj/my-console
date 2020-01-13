@@ -1,128 +1,126 @@
-import React from 'react';
-import { Table } from 'antd';
+import React from "react";
+import { Route, Switch, Link, useRouteMatch } from "react-router-dom";
+import { Menu, Icon } from "antd";
 
-const { Column } = Table;
+import BookmarkPage from "./bookmark";
 
-const data = [
-  {
-    name: '张影',
-    build: '7',
-    room: '501',
-    wechat: 'Sandy',
-  },
-  {
-    name: '周朦',
-    build: '7',
-    room: '1404',
-    wechat: '无瞳',
-  },
-  {
-    name: ' ',
-    build: '7',
-    room: '1402',
-    wechat: ' ',
-  },
-  {
-    name: '蒋利民',
-    build: '7',
-    room: '804',
-    wechat: '如刀__秋叶',
-  },
-  {
-    name: '梁冰',
-    build: '7',
-    room: '1002',
-    wechat: 'L',
-  },
-  {
-    name: '王晶晶',
-    build: '7',
-    room: '1604',
-    wechat: '菁菁',
-  },
-  {
-    name: '徐敏琦',
-    build: '7',
-    room: '1203',
-    wechat: '.',
-  },
-  {
-    name: '杨烨',
-    build: '7',
-    room: '803',
-    wechat: '叶子',
-  },
-  {
-    name: '曹艳荣',
-    build: '7',
-    room: '1304',
-    wechat: '兴业曹艳荣',
-  },
-  {
-    name: '刘德翔',
-    build: '7',
-    room: '1701',
-    wechat: '刘德翔',
-  },
-  {
-    name: '覃瑜',
-    build: '7',
-    room: '901',
-    wechat: '覃瑜',
-  },
-  {
-    name: '王卉',
-    build: '8',
-    room: '503',
-    wechat: '阑珊',
-  },
-  {
-    name: '李桂媛',
-    build: '8',
-    room: '1304',
-    wechat: '木子媛',
-  },
-  {
-    name: '鲍丽',
-    build: '8',
-    room: '1401',
-    wechat: '兵哥',
-  },
-  {
-    name: '彭建希',
-    build: '8',
-    room: '804',
-    wechat: '木朝颜',
-  },
-  {
-    name: '李杰',
-    build: '8',
-    room: '304',
-    wechat: '好好好好的',
-  },
-  {
-    name: '汪纯',
-    build: '8',
-    room: '404',
-    wechat: 'leave',
-  },
-];
+const { SubMenu } = Menu;
 
-const My = props => (
-  <div>
-    <Table
-      footer={() =>
-        `截止到 2019-12-23 大活动，未缴纳基本费用却在微信群里享受资源和服务的部分黑名单`
-      }
-      dataSource={data}
-      rowkey={record => `${record.build}-${record.room}`}
-    >
-      <Column title="业主名" dataIndex="name" key="name" />
-      <Column title="栋号" dataIndex="build" key="build" />
-      <Column title="房号" dataIndex="room" key="room" />
-      <Column title="微信号" dataIndex="wechat" key="wechat" />
-    </Table>
-  </div>
-);
+const My = props => {
+  const { path, url } = useRouteMatch();
+  return (
+    <div>
+      <Menu mode="horizontal">
+        <Menu.Item key="mail">
+          <Icon type="book" />
+          书签
+        </Menu.Item>
+        <SubMenu
+          title={
+            <span>
+              <Icon type="read" />
+              在线电子书
+            </span>
+          }
+        >
+          <Menu.ItemGroup title="软件开发">
+            <Menu.Item key="dev:0">
+              <a
+                href="https://github.com/getify/You-Dont-Know-JS"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                You Dont Know JS
+              </a>
+            </Menu.Item>
+            <Menu.Item key="dev:1">
+              <a
+                href="https://javascript.info/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                The Modern JavaScript Tutorial
+              </a>
+            </Menu.Item>
+            <Menu.Item key="dev:2">
+              <a
+                href="https://eloquentjavascript.net/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Eloquent JavaScript
+              </a>
+            </Menu.Item>
+            <Menu.Item key="dev:3">
+              <a
+                href="https://es6.ruanyifeng.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ECMAScript 6 入门教程
+              </a>
+            </Menu.Item>
+            <Menu.Item key="dev:4">
+              <a
+                href="http://huziketang.mangojuice.top/books/react/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                React.js 小书
+              </a>
+            </Menu.Item>
+          </Menu.ItemGroup>
+          <Menu.ItemGroup title="其他">
+            <Menu.Item key="others:1">如何阅读一本书</Menu.Item>
+            <Menu.Item key="others:2">汽车是怎样跑起来的</Menu.Item>
+          </Menu.ItemGroup>
+        </SubMenu>
+        <SubMenu
+          title={
+            <span>
+              <Icon type="" />
+              博客
+            </span>
+          }
+        >
+          <Menu.Item key="blog:1">
+            <Link to="https://cddbysj.github.io/">Bill's Note</Link>
+          </Menu.Item>
+          <Menu.Item key="blog:2">
+            <Link to="http://www.ruanyifeng.com/blog/">阮一峰的网络日志</Link>
+          </Menu.Item>
+          <Menu.Item key="blog:3">
+            <Link to="https://overreacted.io/">
+              Personal blog by Dan Abramov.
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="blog:4">Bill's Note</Menu.Item>
+          <Menu.Item key="blog:5">Bill's Note</Menu.Item>
+          <Menu.Item key="blog:6">Bill's Note</Menu.Item>
+          <Menu.Item key="blog:7">Bill's Note</Menu.Item>
+        </SubMenu>
+      </Menu>
+      <ul>
+        <li>
+          <Link to={`${url}/bookmark`}>书签</Link>
+        </li>
+        <li>
+          <Link to={`${url}/movie`}>影视</Link>
+        </li>
+        <li>
+          <Link to={`${url}/music`}>音乐</Link>
+        </li>
+        <li>
+          <Link to={`${url}/book`}>书籍</Link>
+        </li>
+      </ul>
+      <Switch>
+        <Route path={`${path}/bookmark`}>
+          <BookmarkPage />
+        </Route>
+      </Switch>
+    </div>
+  );
+};
 
 export default My;
