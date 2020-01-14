@@ -1,110 +1,45 @@
 // ** 个人网址导航，相当于在视觉上扁平展示的书签 ** //
 
-import React from "react";
-import { Layout, Menu, Icon, Card, Avatar, Row, Col } from "antd";
-import { Route, Switch, Link, useRouteMatch } from "react-router-dom";
-import styles from "./bookmark.module.css";
+import React from 'react';
+import { Layout, Menu, Icon, Card, Avatar, Row, Col } from 'antd';
+import {
+  Route,
+  Switch,
+  Link,
+  useRouteMatch,
+  useHistory,
+} from 'react-router-dom';
+import styles from './bookmark.module.css';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
-// metro color
-const metroColors = [
-  '#b51921',
-  '#b2103e',
-  '#c41832',
-   '#ef342a',
-   '#a84d18',
-  '#f68f26',
-   '#faca07',
-  '#07594a',
-   '#4ba946',
-   '#5fc0a7',
-   '#0376c2',
-   '#c41832',
-   '#c41832',
-  '#be3223',
-   '#f45f7c',
-   '#d16f20',
-   '#ffd00d',
-   '#076750',
-   '#7abf45',
-   '#75c7b9',
-   '#29409a',
-   '#ee1e4f',
-   '#d2174a',
-   '#f79d8b',
-   '#ce7020',
-  '#e9a519',
-   '#fddf55',
-   '#076a66',
-  '#a7c299',
-   '#098ec4',
-   '#89d2e3',
-   '#7572a7',
-   '#f7b1bf',
-   '#f67e2a',
-   '#f57125',
-   '#fbaf37',
-   '#fde14e',
-   '#076c53',
-   '#b2d68c',
-   '#8fd1cd',
-   '#0798c7',
-   '#9597ca',
-   '#69686d',
-   '#f47a25',
-   '#fcba5d',
-   '#f8d29d',
-   '#ffe285',
-   '#077e7a',
-   '#d0e4a9',
-   '#81cdc1',
-   '#22b6ed',
-   '#b4d6f2',
-   '#c077af',
-   '#bbbfc2',
-   '#fed7a6',
-   '#fcae62',
-   '#ffe901',
-   '#078e82',
-   '#d7df3f',
-   '#89d3de',
-   '#22b6ed',
-   '#b295c5',
-   '#c5c4c9',
-   '#d1d5d8',
-   '#f2f1f6',
-   '#efe946',
-   '#fff455',
-   '#ffe901',
-   '#4c7020',
-   '#c4e0e1',
-   '#79bce7',
-   '#b7e1fa',
-   '#c7a7d2',
-   '#e5e4e9',
-   '#f2f1f6',
-   '#f2f2f6',
-   '#1fb27f',
-   '#b5a87f',
-   '#07b195',
-   '#d7df3f',
-   '#6dade2',
-   '#4dc7ec',
-   '#a8b7d8',
-   '#b8a1a9',
-   '#f8c9cb',
-  '#f2f1f6',
-]
- 
+const palette = [
+  '#1abc9c',
+  '#2ecc71',
+  '#3498db',
+  '#9b59b6',
+  '#34495e',
+  '#16a085',
+  '#27ae60',
+  '#2980b9',
+  '#8e44ad',
+  '#2c3e50',
+  '#f1c40f',
+  '#e67e22',
+  '#e74c3c',
+  '#95a5a6',
+  '#f39c12',
+  '#d35400',
+  '#c0392b',
+  '#7f8c8d',
+  '#bdc3c7',
+];
 
 const RandomAvatar = ({ name }) => {
-  const h = (360 * Math.random()).toFixed(0);
-  const s = (100 * Math.random()).toFixed(0);
-  const l = (100 * Math.random()).toFixed(0);
-
-  const randomColor = `hsl(${h},${s}%,${l}%)`;
+  const index = Math.floor(palette.length * Math.random());
+  const randomColor = palette[index];
+  console.log(randomColor);
 
   return (
     <div
@@ -119,41 +54,41 @@ const RandomAvatar = ({ name }) => {
 // 个人网址导航
 const sites = [
   {
-    name: "Fireball",
-    description: "德国匿名搜索引擎",
-    url: "https://fireball.com/",
-    category: "searchEngine"
+    name: 'Fireball',
+    description: '德国匿名搜索引擎',
+    url: 'https://fireball.com/',
+    category: 'searchEngine',
   },
   {
-    name: "Peekier",
-    description: "自带搜索结果预览",
-    url: "https://peekier.com/",
-    category: "searchEngine"
+    name: 'Peekier',
+    description: '自带搜索结果预览',
+    url: 'https://peekier.com/',
+    category: 'searchEngine',
   },
   {
-    name: "DuckDuckGo",
-    description: "一款不追踪你的搜索引擎",
-    url: "https://duckduckgo.com/",
-    category: "searchEngine"
+    name: 'DuckDuckGo',
+    description: '一款不追踪你的搜索引擎',
+    url: 'https://duckduckgo.com/',
+    category: 'searchEngine',
   },
   {
-    name: "WebCrawler",
-    description: "元搜索引擎",
-    url: "http://www.webcrawler.com/",
-    category: "searchEngine"
+    name: 'WebCrawler',
+    description: '元搜索引擎',
+    url: 'http://www.webcrawler.com/',
+    category: 'searchEngine',
   },
   {
-    name: "Qwant",
-    description: "法国隐私且中立的搜索引擎",
-    url: "https://www.qwant.com/",
-    category: "searchEngine"
+    name: 'Qwant',
+    description: '法国隐私且中立的搜索引擎',
+    url: 'https://www.qwant.com/',
+    category: 'searchEngine',
   },
   {
-    name: "Google",
-    description: "全球最大的搜索引擎",
-    url: "https://www.google.com/",
-    category: "searchEngine"
-  }
+    name: 'Google',
+    description: '全球最大的搜索引擎',
+    url: 'https://www.google.com/',
+    category: 'searchEngine',
+  },
 ];
 
 const menu = (
@@ -237,10 +172,11 @@ const menu = (
 );
 
 const BookmarkPage = props => {
+  const history = useHistory();
+
   return (
-    <div style={{ background: "#fff" }}>
+    <Layout style={{ background: '#fff' }}>
       <Layout style={{ marginRight: 200 }}>
-        style={{ background: "#fff", padding: 0 }} />
         <Content>
           <div style={{ padding: 24 }}>
             <section id="content-1">
@@ -250,7 +186,7 @@ const BookmarkPage = props => {
               </p>
               <Row gutter={[16, 16]} type="flex">
                 <Col span={6}>
-                  <Card>
+                  <Card hoverable>
                     <Card.Meta
                       avatar={
                         <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
@@ -366,13 +302,19 @@ const BookmarkPage = props => {
               <Row gutter={[16, 16]} type="flex">
                 {sites.map(site => (
                   <Col span={6} key={site.name}>
-                    <Card>
-                      <Card.Meta
-                        title={site.name}
-                        description={site.description}
-                        avatar={<RandomAvatar name={site.name} />}
-                      />
-                    </Card>
+                    <a
+                      href={site.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Card hoverable>
+                        <Card.Meta
+                          title={site.name}
+                          description={site.description}
+                          avatar={<RandomAvatar name={site.name} />}
+                        />
+                      </Card>
+                    </a>
                   </Col>
                 ))}
               </Row>
@@ -383,54 +325,29 @@ const BookmarkPage = props => {
       </Layout>
       <Sider
         style={{
-          overflow: "auto",
-          height: "100vh",
-          position: "fixed",
+          overflow: 'auto',
+          height: '100vh',
+          position: 'fixed',
           right: 0,
-          top: 0
+          top: 0,
         }}
       >
         <div className="logo" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
           <Menu.Item key="1">
             <Icon type="user" />
             <span className="nav-text">
-              <a ref="#content-1">content 1</a>
+              1{/* <a ref="#content-1">content 1</a> */}
             </span>
           </Menu.Item>
           <Menu.Item key="2">
             <Icon type="video-camera" />
             <span className="nav-text">
-              <a ref="#content-2">content 2</a>
+              2{/* <a ref="#content-2">content 2</a> */}
             </span>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <Icon type="upload" />
-            <span className="nav-text">nav 3</span>
-          </Menu.Item>
-          <Menu.Item key="4">
-            <Icon type="bar-chart" />
-            <span className="nav-text">nav 4</span>
-          </Menu.Item>
-          <Menu.Item key="5">
-            <Icon type="cloud-o" />
-            <span className="nav-text">nav 5</span>
-          </Menu.Item>
-          <Menu.Item key="6">
-            <Icon type="appstore-o" />
-            <span className="nav-text">nav 6</span>
-          </Menu.Item>
-          <Menu.Item key="7">
-            <Icon type="team" />
-            <span className="nav-text">nav 7</span>
-          </Menu.Item>
-          <Menu.Item key="8">
-            <Icon type="shop" />
-            <span className="nav-text">nav 8</span>
           </Menu.Item>
         </Menu>
       </Sider>
-      </div>
     </Layout>
   );
 };
