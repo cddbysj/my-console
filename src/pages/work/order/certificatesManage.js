@@ -81,6 +81,7 @@ const CertificatesManagePage = props => {
   const addToCardQueue = async card => {
     await firebase.finishCertificatesPrint(card.orderId, true);
     setCardQueue(prev => [card, ...prev]);
+    message.success("已添加到打印列表", 0.5);
   };
 
   const fillCard = event => {
@@ -130,8 +131,12 @@ const CertificatesManagePage = props => {
                           onClick={() => addToCardQueue(item)}
                         />
                       </Tooltip>,
-                      <Icon type="edit" key="edit" />,
-                      <Icon type="ellipsis" key="ellipsis" />
+                      <Tooltip title="未完成的功能">
+                        <Icon type="edit" key="edit" />
+                      </Tooltip>,
+                      <Tooltip title="未完成的功能">
+                        <Icon type="ellipsis" key="ellipsis" />
+                      </Tooltip>
                     ]}
                   >
                     <p>{item.name}</p>
@@ -165,6 +170,12 @@ const CertificatesManagePage = props => {
               清空
             </Button>
           </Button.Group>
+          <p>
+            <Icon type="bulb" theme="twoTone" />
+            <span>
+              提示：将鼠标悬停在合格证卡片右上角，可以删除该合格证所属订单所有合格证
+            </span>
+          </p>
         </div>
         {cardQueue.length ? (
           <div className={styles.cardArea}>

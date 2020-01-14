@@ -31,7 +31,7 @@ const WkProduct = () => (
           </Collapse>
         </Panel>
         <Panel header="温度传感器" key="3">
-          PT100铂热电阻， 技术参数：外装式，螺纹规格 M27 * 2，探头长度
+          PT100 铂热电阻， 技术参数：外装式，螺纹规格 M27 * 2，探头长度
           150mm。供应商：之前直接从长沙宇光采购，目前从长沙易变电气采购。
         </Panel>
         <Panel header="液位变送器" key="4">
