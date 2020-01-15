@@ -8,6 +8,10 @@
   color: #ffffff;
 }
 
+.category {
+  margin: 32px 0;
+}
+
 .card {
   min-height: 120px;
 }
