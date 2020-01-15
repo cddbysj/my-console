@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch, Link, useRouteMatch } from "react-router-dom";
 
-import BookmarkPage from "./bookmark";
+import BookmarkPage from "./bookmarkPage";
 
 const My = props => {
   const { path, url } = useRouteMatch();

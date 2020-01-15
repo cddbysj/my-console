@@ -104,6 +104,14 @@ class Firebase {
       .collection("certificates")
       .doc(id)
       .update({ printDone: checked });
+
+  // ** Sites API ** //
+
+  // 获取所有个人网址条目
+  sites = () => this.db.collection("sites");
+
+  // 新建一个网址条目
+  createSite = async site => await this.db.collection("sites").add(site);
 }
 
 export default new Firebase();
