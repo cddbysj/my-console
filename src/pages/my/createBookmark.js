@@ -1,39 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Icon,
-  Card,
-  Row,
-  Col,
-  Button,
-  Drawer,
-  Form,
-  Input,
-  message,
-  Select,
-} from 'antd';
+import React, { useState } from "react";
+import { Button, Drawer, Form, Input, message, Select } from "antd";
+import { SITE_CATEGORIES } from "constants/index";
 
 const { Option } = Select;
-
-// 导航网址类别
-const categories = [
-  'Awesome',
-  'Front End',
-  'Online Tools',
-  'Blog',
-  'Front End Team',
-  'Ebook',
-  'News',
-  'Search Engine',
-  'Encyclopedia',
-  'Others',
-];
 
 const CreateBookmark = props => {
   const [visible, setVisible] = useState(false);
 
   const {
     addSite,
-    form: { getFieldDecorator, validateFieldsAndScroll },
+    form: { getFieldDecorator, validateFieldsAndScroll }
   } = props;
 
   const showDrawer = () => setVisible(true);
@@ -45,30 +21,30 @@ const CreateBookmark = props => {
     validateFieldsAndScroll(async (errors, values) => {
       if (!errors) {
         //
-        console.log('received values: ', values);
+        console.log("received values: ", values);
         await addSite({ ...values, createAt: Date.now() });
         onDrawerClose();
-        message.success('添加成功', 0.5);
+        message.success("添加成功", 0.5);
       } else {
-        message.failed('添加失败', 1.5);
+        message.failed("添加失败", 1.5);
       }
     });
   };
 
   const formItemLayout = {
     labelCol: {
-      span: 8,
+      span: 8
     },
     wrapperCol: {
-      span: 16,
-    },
+      span: 16
+    }
   };
 
   const tailFormItemLayout = {
     wrapperCol: {
       span: 16,
-      offset: 8,
-    },
+      offset: 8
+    }
   };
 
   return (
@@ -86,63 +62,63 @@ const CreateBookmark = props => {
       >
         <Form onSubmit={onSubmit} {...formItemLayout}>
           <Form.Item label="标题">
-            {getFieldDecorator('title', {
+            {getFieldDecorator("title", {
               rules: [
                 {
                   required: true,
-                  message: '请输入网址标题',
+                  message: "请输入网址标题"
                 },
                 {
                   whitespace: true,
-                  message: '网址标题不能为空字符',
-                },
-              ],
+                  message: "网址标题不能为空字符"
+                }
+              ]
             })(<Input autoFocus />)}
           </Form.Item>
           <Form.Item label="概要">
-            {getFieldDecorator('description', {
+            {getFieldDecorator("description", {
               rules: [
                 {
                   required: true,
-                  message: '请输入描述信息',
+                  message: "请输入描述信息"
                 },
                 {
                   whitespace: true,
-                  message: '描述信息不能为空字符',
-                },
-              ],
-            })(<Input />)}
+                  message: "描述信息不能为空字符"
+                }
+              ]
+            })(<Input placeholder="尽可能简短" />)}
           </Form.Item>
           <Form.Item label="网址">
-            {getFieldDecorator('url', {
+            {getFieldDecorator("url", {
               rules: [
                 {
                   required: true,
-                  message: '请输入链接',
+                  message: "请输入链接"
                 },
                 {
                   whitespace: true,
-                  message: '链接不能为空字符',
-                },
-              ],
+                  message: "链接不能为空字符"
+                }
+              ]
             })(<Input />)}
           </Form.Item>
           <Form.Item label="类别">
-            {getFieldDecorator('category', {
+            {getFieldDecorator("category", {
               rules: [
                 {
                   required: true,
-                  message: '请输入网址类别',
+                  message: "请输入网址类别"
                 },
                 {
                   whitespace: true,
-                  message: '网址类别不能为空字符',
-                },
+                  message: "网址类别不能为空字符"
+                }
               ],
-              initialValue: categories[0],
+              initialValue: SITE_CATEGORIES[0]
             })(
               <Select>
-                {categories.map(c => (
+                {SITE_CATEGORIES.map(c => (
                   <Option key={c} value={c}>
                     {c}
                   </Option>
@@ -164,4 +140,4 @@ const CreateBookmark = props => {
   );
 };
 
-export default Form.create({ name: 'create_bookmark' })(CreateBookmark);
+export default Form.create({ name: "create_bookmark" })(CreateBookmark);
