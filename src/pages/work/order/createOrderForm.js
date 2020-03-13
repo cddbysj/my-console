@@ -16,11 +16,13 @@ import {
 } from "antd";
 import * as ROUTES from "constants/routes";
 import firebase from "api/firebase";
+import useAuth from "hooks/useAuth";
 import styles from "./createOrderForm.module.css";
 
 const { RangePicker } = DatePicker;
 
 const CreateOrderFormBase = props => {
+  const auth = useAuth();
   const history = useHistory();
   // 用于动态增删产品
   const [items, setItems] = useState([0]);
@@ -34,6 +36,12 @@ const CreateOrderFormBase = props => {
 
   const onSubmit = e => {
     e.preventDefault();
+
+    if (!auth) {
+      message.warn("您没有该权限", 1);
+      return;
+    }
+
     validateFieldsAndScroll((errors, values) => {
       if (!errors) {
         let { date, products } = values;

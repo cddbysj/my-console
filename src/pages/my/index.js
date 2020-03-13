@@ -1,10 +1,10 @@
 import React from "react";
-import { Route, Switch, Link, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
 
 import BookmarkPage from "./bookmarkPage";
 
 const My = props => {
-  const { path, url } = useRouteMatch();
+  const { path } = useRouteMatch();
   return (
     <div>
       <Switch>

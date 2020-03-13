@@ -9,6 +9,11 @@
   overflow: hidden;
 }
 
+.filter {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .cardActions {
   display: flex;
   flex-direction: row-reverse;

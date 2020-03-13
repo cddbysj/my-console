@@ -14,11 +14,13 @@ import {
   Empty,
   Tooltip,
   Input,
+  Radio,
   InputNumber,
   DatePicker,
   message
 } from "antd";
 import firebase from "api/firebase";
+import useCertificates from "hooks/useCertificates";
 import styles from "./certificate.module.css";
 import classNames from "classnames/bind";
 
@@ -32,41 +34,17 @@ const showTimeInCN = date => new Date(date).toLocaleString("zh-Hans-CN");
 const CertificatesManagePage = props => {
   const { getFieldDecorator, validateFieldsAndScroll } = props.form;
 
-  // 用于展示的合格证卡片信息
-  const [certificates, setCertificates] = useState(null);
+  const [filter, setFilter] = useState("SHOW_ACTIVE");
+  const certificates = useCertificates(filter);
+
   // 合格证卡片队列，一次最多打印 9 个。
   const initialCardQueue = JSON.parse(localStorage.getItem("cardQueue")) || [];
   const [cardQueue, setCardQueue] = useState(initialCardQueue);
 
   useEffect(() => {
-    const unsubscribe = firebase.certificates().onSnapshot(snapshot => {
-      const certificates = [];
-      snapshot.forEach(doc => {
-        // 转化成想要的结构，用于展示
-        const {
-          orderId,
-          arrivalAt,
-          products,
-          preparePrintAt,
-          printDone
-        } = doc.data();
-        Object.keys(products).forEach(name =>
-          certificates.push({
-            ...products[name],
-            name,
-            orderId,
-            arrivalAt,
-            preparePrintAt,
-            printDone
-          })
-        );
-      });
-
-      setCertificates(certificates);
-      localStorage.setItem("cardQueue", JSON.stringify(cardQueue));
-    });
-    return unsubscribe;
-  }, [cardQueue]);
+    localStorage.setItem("cardQueue", JSON.stringify(cardQueue));
+    return () => localStorage.removeItem("cardQueue");
+  });
 
   // 调用 Web API 启用打印机
   const onPrint = () => {
@@ -107,17 +85,29 @@ const CertificatesManagePage = props => {
     setCardQueue(prev => prev.filter(card => card.name !== cardName));
   };
 
+  // 设置合格证可见性：未打印、已打印、全部
+  const setVisibilityFilter = e => {
+    setFilter(e.target.value);
+  };
+
   return (
     <Tabs defaultActiveKey="plan">
       <TabPane tab="计划" key="plan">
         <div className={cx("noPrint", "planArea")}>
+          <div className={styles.filter}>
+            <Radio.Group onChange={setVisibilityFilter} defaultValue="未打印">
+              <Radio.Button value="SHOW_ACTIVE">未打印</Radio.Button>
+              <Radio.Button value="SHOW_ALL">全部</Radio.Button>
+              <Radio.Button value="SHOW_COMPLETED">已打印</Radio.Button>
+            </Radio.Group>
+          </div>
           <p>
-            备注：产品的合格证是以一个订单为基本单位，同一订单内的所有产品合格证应该同时被添加到打印队列，同时完成打印，以及同时被删除。
+            产品的合格证是以一个订单为基本单位，同一订单内的所有产品合格证应该同时被添加到打印队列，同时完成打印，以及同时被删除。
           </p>
+          <p>合格证不足 9 个时，可考虑用常见的浸没式加热器合格证填充。</p>
           {certificates ? (
             <List
               grid={{ gutter: 16, xl: 6, md: 4 }}
-              footer="合格证不足 9 个时，可考虑用常见的浸没式加热器合格证填充"
               dataSource={certificates}
               renderItem={item => (
                 <List.Item>
@@ -149,7 +139,8 @@ const CertificatesManagePage = props => {
                         <Tag color="#f50">未打印</Tag>
                       )}
                     </p>
-                    <p>创建日期：{showTimeInCN(item.preparePrintAt)}</p>
+                    <p>创建日期：</p>
+                    <p>{showTimeInCN(item.preparePrintAt)}</p>
                     <p className={styles.ellipsis}>订单号：{item.orderId}</p>
                   </Card>
                 </List.Item>

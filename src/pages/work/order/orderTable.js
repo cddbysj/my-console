@@ -9,15 +9,18 @@ import {
   List,
   Icon,
   Typography,
-  Tag
+  Tag,
+  message
 } from "antd";
 import * as ROUTES from "constants/routes";
+import useAuth from "hooks/useAuth";
 
 const { Column } = Table;
 const { Text } = Typography;
 
 const OrderTable = props => {
   const history = useHistory();
+  const auth = useAuth();
 
   const {
     orders,
@@ -36,6 +39,12 @@ const OrderTable = props => {
       products,
       date: { arrivalAt }
     } = record;
+
+    if (!auth) {
+      message.warn("您没有该权限");
+      return;
+    }
+
     await onToggleCertificatePrint(id, checked);
     // firestore 对于元素类型为对象的数组支持比较差
     // 为了适应 firestore 的数据结构，将 products 转化成对象结构
@@ -52,12 +61,34 @@ const OrderTable = props => {
       orderId: id, // 对应的订单 id
       products: productsInfo,
       printDone: false, // 是否已打印
-      preparePrintAt: Date.now(), // 准备打印日期
+      preparePrintAt: Date.now() // 准备打印日期
     };
     // 选中则新建该订单下所有产品的合格证，不选中则删除该订单下所有产品的合格证
     checked
       ? await createCertificates(id, certificateInfo)
       : await removeCertificates(id);
+  };
+
+  const handleToggleNameplatePrint = async (id, checked) => {
+    if (!auth) {
+      message.warn("您没有该权限");
+      return;
+    }
+    await onToggleNameplatePrint(id, checked);
+  };
+
+  const handleRemoveOrder = async orderId => {
+    if (!auth) {
+      message.warn("您没有该权限");
+      return;
+    }
+
+    try {
+      await onRemoveOrder(orderId);
+      message.success("删除订单成功", 1);
+    } catch (error) {
+      message.error("删除订单失败", 2.5);
+    }
   };
 
   return (
@@ -128,7 +159,9 @@ const OrderTable = props => {
           render={(text, record) => (
             <Switch
               checked={record.nameplate}
-              onChange={checked => onToggleNameplatePrint(record.id, checked)}
+              onChange={checked =>
+                handleToggleNameplatePrint(record.id, checked)
+              }
               checkedChildren={<Icon type="check" />}
               unCheckedChildren={<Icon type="close" />}
               defaultChecked
@@ -162,7 +195,7 @@ const OrderTable = props => {
               <Button
                 type="link"
                 icon="delete"
-                onClick={() => onRemoveOrder(record.id)}
+                onClick={() => handleRemoveOrder(record.id)}
               />
               <Divider type="vertical" />
               <Button type="link" icon="edit" />

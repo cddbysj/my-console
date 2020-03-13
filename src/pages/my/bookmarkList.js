@@ -20,9 +20,7 @@ const RandomAvatar = ({ title }) => {
   );
 };
 
-const BookmarkList = props => {
-  const { sites } = props;
-
+const BookmarkList = ({ sites }) => {
   return (
     <div>
       <Row gutter={8}>

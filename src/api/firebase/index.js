@@ -78,12 +78,27 @@ class Firebase {
         certificate: checked
       });
 
-  // 获取最近 9 个订单的合格证
-  certificates = () =>
-    this.db
-      .collection("certificates")
-      .orderBy("arrivalAt", "desc")
-      .limit(9);
+  // 获取未打印的合格证
+  certificates = (filter = "SHOW_ACTIVE") => {
+    switch (filter) {
+      case "SHOW_ALL":
+        return this.db
+          .collection("certificates")
+          .orderBy("arrivalAt", "desc")
+          .limit(30);
+      case "SHOW_COMPLETED":
+        return this.db
+          .collection("certificates")
+          .where("printDone", "==", true)
+          .orderBy("arrivalAt", "desc")
+          .limit(30);
+      default:
+        return this.db
+          .collection("certificates")
+          .where("printDone", "==", false)
+          .orderBy("arrivalAt", "desc");
+    }
+  };
 
   // 新建当前订单的产品合格证
   createCertificates = async (id, certificateInfo) =>
