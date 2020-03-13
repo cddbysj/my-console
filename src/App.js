@@ -1,6 +1,14 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Layout, Menu, Icon, Result, Spin } from "antd";
+import { Layout, Menu, Result, Spin } from "antd";
+import {
+  FileAddOutlined,
+  TabletOutlined,
+  FileImageOutlined,
+  FileOutlined,
+  ContactsOutlined,
+  ProjectOutlined
+} from "@ant-design/icons";
 import useAuth from "./hooks/useAuth";
 
 import LoginForm from "./components/signIn";
@@ -46,44 +54,37 @@ function App() {
             >
               <Menu.Item key="create-order">
                 <Link to={ROUTES.CREATE_ORDER}>
-                  <Icon type="file-add" />
-                  新建订单
+                  <FileAddOutlined /> 新建订单
                 </Link>
               </Menu.Item>
               <Menu.Item key="order-table">
                 <Link to={ROUTES.WORK_ORDERS}>
-                  <Icon type="table" />
-                  订单
+                  <TabletOutlined /> 订单
                 </Link>
               </Menu.Item>
               <Menu.Item key="certificates">
                 <Link to={ROUTES.WORK_CERTIFICATES}>
-                  <Icon type="file-image" />
-                  合格证
+                  <FileImageOutlined /> 合格证
                 </Link>
               </Menu.Item>
               <Menu.Item key="jrq">
                 <Link to={ROUTES.WORK_JRQ}>
-                  <Icon type="file" />
-                  加热器
+                  <FileOutlined /> 加热器
                 </Link>
               </Menu.Item>
               <Menu.Item key="wk">
                 <Link to={ROUTES.WORK_WK}>
-                  <Icon type="file" />
-                  温控
+                  <FileOutlined /> 温控
                 </Link>
               </Menu.Item>
               <Menu.Item key="businessInfo">
                 <Link to={ROUTES.WORK_BUSINESS_INFO}>
-                  <Icon type="contacts" />
-                  商务信息
+                  <ContactsOutlined /> 商务信息
                 </Link>
               </Menu.Item>
               <Menu.Item key="my">
                 <Link to={ROUTES.MY_PAGE}>
-                  <Icon type="project" />
-                  个人事务
+                  <ProjectOutlined /> 个人事务
                 </Link>
               </Menu.Item>
             </Menu>

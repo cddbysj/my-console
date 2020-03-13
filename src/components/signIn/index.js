@@ -1,5 +1,6 @@
 import React from "react";
-import { Form, Icon, Input, Button, message } from "antd";
+import { Form, Input, Button, message } from "antd";
+import { LogoutOutlined, MailOutlined, LockOutlined } from "@ant-design/icons";
 import firebase from "../../api/firebase";
 import useAuth from "../../hooks/useAuth";
 
@@ -11,32 +12,23 @@ const LoginForm = props => {
   const user = useAuth();
   const email = user && user.email;
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log("Received values of form: ", values);
-        const { email, password } = values;
-        firebase
-          .signInWithEmailAndPassword(email, password)
-          .then(result => {
-            message.success("欢迎", 1);
-          })
-          .catch(error => message.error(error.message));
-      }
-    });
+  const onFinish = values => {
+    console.log("Received values of form: ", values);
+    const { email, password } = values;
+    firebase
+      .signInWithEmailAndPassword(email, password)
+      .then(result => {
+        message.success("欢迎", 1);
+      })
+      .catch(error => message.error(error.message));
   };
 
   const signOut = () => {
     firebase.signOut();
   };
 
-  const {
-    getFieldDecorator,
-    getFieldsError,
-    getFieldError,
-    isFieldTouched
-  } = props.form;
+  const [form] = Form.useForm();
+  const { getFieldsError, getFieldError, isFieldTouched } = form;
 
   // Only show error after a field is touched.
   const emailError = isFieldTouched("email") && getFieldError("email");
@@ -45,7 +37,7 @@ const LoginForm = props => {
   return email ? (
     <div style={{ display: "flex", alignItems: "center" }}>
       <Button
-        icon="logout"
+        icon={<LogoutOutlined />}
         style={{ marginLeft: 20 }}
         size="small"
         onClick={signOut}
@@ -54,36 +46,32 @@ const LoginForm = props => {
       </Button>
     </div>
   ) : (
-    <Form layout="inline" onSubmit={handleSubmit}>
+    <Form layout="inline" onFinish={onFinish} form={form}>
       <Form.Item
         validateStatus={emailError ? "error" : ""}
         help={emailError || ""}
+        name="email"
+        rules={[
+          { type: "email", message: "无效的电子邮箱" },
+          { required: true, message: "请输入你的电子邮箱" }
+        ]}
       >
-        {getFieldDecorator("email", {
-          rules: [
-            { type: "email", message: "无效的电子邮箱" },
-            { required: true, message: "请输入你的电子邮箱" }
-          ]
-        })(
-          <Input
-            prefix={<Icon type="mail" style={{ color: "rgba(0,0,0,.25)" }} />}
-            placeholder="电子邮件"
-          />
-        )}
+        <Input
+          prefix={<MailOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+          placeholder="电子邮件"
+        />
       </Form.Item>
       <Form.Item
         validateStatus={passwordError ? "error" : ""}
         help={passwordError || ""}
+        name="password"
+        rules={[{ required: true, message: "Please input your Password!" }]}
       >
-        {getFieldDecorator("password", {
-          rules: [{ required: true, message: "Please input your Password!" }]
-        })(
-          <Input
-            prefix={<Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />}
-            type="password"
-            placeholder="密码"
-          />
-        )}
+        <Input
+          prefix={<LockOutlined style={{ color: "rgba(0,0,0,.25)" }} />}
+          type="password"
+          placeholder="密码"
+        />
       </Form.Item>
       <Form.Item>
         <Button
@@ -98,6 +86,4 @@ const LoginForm = props => {
   );
 };
 
-const WrappedLoginForm = Form.create({ name: "login" })(LoginForm);
-
-export default WrappedLoginForm;
+export default LoginForm;

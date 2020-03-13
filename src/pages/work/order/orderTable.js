@@ -7,11 +7,18 @@ import {
   Button,
   Switch,
   List,
-  Icon,
   Typography,
   Tag,
   message
 } from "antd";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  EditOutlined,
+  CopyOutlined,
+  DeleteOutlined
+} from "@ant-design/icons";
+
 import * as ROUTES from "constants/routes";
 import useAuth from "hooks/useAuth";
 
@@ -162,8 +169,8 @@ const OrderTable = props => {
               onChange={checked =>
                 handleToggleNameplatePrint(record.id, checked)
               }
-              checkedChildren={<Icon type="check" />}
-              unCheckedChildren={<Icon type="close" />}
+              checkedChildren={<CheckOutlined />}
+              unCheckedChildren={<CloseOutlined />}
               defaultChecked
             />
           )}
@@ -181,8 +188,8 @@ const OrderTable = props => {
             <Switch
               checked={record.certificate}
               onChange={checked => handleCertificateChange(record, checked)}
-              checkedChildren={<Icon type="check" />}
-              unCheckedChildren={<Icon type="close" />}
+              checkedChildren={<CheckOutlined />}
+              unCheckedChildren={<CloseOutlined />}
               defaultChecked
             />
           )}
@@ -194,13 +201,13 @@ const OrderTable = props => {
             <span>
               <Button
                 type="link"
-                icon="delete"
+                icon={<DeleteOutlined />}
                 onClick={() => handleRemoveOrder(record.id)}
               />
               <Divider type="vertical" />
-              <Button type="link" icon="edit" />
+              <Button type="link" icon={<EditOutlined />} />
               <Divider type="vertical" />
-              <Button type="link" icon="copy" />
+              <Button type="link" icon={<CopyOutlined />} />
             </span>
           )}
         />

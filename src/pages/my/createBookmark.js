@@ -1,34 +1,22 @@
 import React, { useState } from "react";
 import { Button, Drawer, Form, Input, message, Select } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { SITE_CATEGORIES } from "constants/index";
 
 const { Option } = Select;
 
-const CreateBookmark = props => {
+const CreateBookmark = ({ addSite }) => {
   const [visible, setVisible] = useState(false);
-
-  const {
-    addSite,
-    form: { getFieldDecorator, validateFieldsAndScroll }
-  } = props;
 
   const showDrawer = () => setVisible(true);
 
   const onDrawerClose = () => setVisible(false);
 
-  const onSubmit = e => {
-    e.preventDefault();
-    validateFieldsAndScroll(async (errors, values) => {
-      if (!errors) {
-        //
-        console.log("received values: ", values);
-        await addSite({ ...values, createAt: Date.now() });
-        onDrawerClose();
-        message.success("添加成功", 0.5);
-      } else {
-        message.failed("添加失败", 1.5);
-      }
-    });
+  const onFinish = async values => {
+    console.log("received values: ", values);
+    await addSite({ ...values, createAt: Date.now() });
+    onDrawerClose();
+    message.success("添加成功", 0.5);
   };
 
   const formItemLayout = {
@@ -49,7 +37,11 @@ const CreateBookmark = props => {
 
   return (
     <div>
-      <Button type="primary" icon="plus" onClick={() => showDrawer()}>
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        onClick={() => showDrawer()}
+      >
         添加网址
       </Button>
       <Drawer
@@ -60,71 +52,82 @@ const CreateBookmark = props => {
         visible={visible}
         width={400}
       >
-        <Form onSubmit={onSubmit} {...formItemLayout}>
-          <Form.Item label="标题">
-            {getFieldDecorator("title", {
-              rules: [
-                {
-                  required: true,
-                  message: "请输入网址标题"
-                },
-                {
-                  whitespace: true,
-                  message: "网址标题不能为空字符"
-                }
-              ]
-            })(<Input autoFocus />)}
+        <Form
+          onFinish={onFinish}
+          {...formItemLayout}
+          initialValues={{
+            category: SITE_CATEGORIES[0]
+          }}
+        >
+          <Form.Item
+            name="title"
+            label="标题"
+            rules={[
+              {
+                required: true,
+                message: "请输入网址标题"
+              },
+              {
+                whitespace: true,
+                message: "网址标题不能为空字符"
+              }
+            ]}
+          >
+            <Input autoFocus />
           </Form.Item>
-          <Form.Item label="概要">
-            {getFieldDecorator("description", {
-              rules: [
-                {
-                  required: true,
-                  message: "请输入描述信息"
-                },
-                {
-                  whitespace: true,
-                  message: "描述信息不能为空字符"
-                }
-              ]
-            })(<Input placeholder="尽可能简短" />)}
+          <Form.Item
+            name="description"
+            label="概要"
+            rules={[
+              {
+                required: true,
+                message: "请输入描述信息"
+              },
+              {
+                whitespace: true,
+                message: "描述信息不能为空字符"
+              }
+            ]}
+          >
+            <Input placeholder="尽可能简短" />
           </Form.Item>
-          <Form.Item label="网址">
-            {getFieldDecorator("url", {
-              rules: [
-                {
-                  required: true,
-                  message: "请输入链接"
-                },
-                {
-                  whitespace: true,
-                  message: "链接不能为空字符"
-                }
-              ]
-            })(<Input />)}
+          <Form.Item
+            name="url"
+            label="网址"
+            rules={[
+              {
+                required: true,
+                message: "请输入链接"
+              },
+              {
+                whitespace: true,
+                message: "链接不能为空字符"
+              }
+            ]}
+          >
+            <Input />
           </Form.Item>
-          <Form.Item label="类别">
-            {getFieldDecorator("category", {
-              rules: [
-                {
-                  required: true,
-                  message: "请输入网址类别"
-                },
-                {
-                  whitespace: true,
-                  message: "网址类别不能为空字符"
-                }
-              ],
-              initialValue: SITE_CATEGORIES[0]
-            })(
-              <Select>
-                {SITE_CATEGORIES.map(c => (
-                  <Option key={c} value={c}>
-                    {c}
-                  </Option>
-                ))}
-              </Select>
-            )}
+          <Form.Item
+            name="category"
+            label="类别"
+            rules={[
+              {
+                required: true,
+                message: "请输入网址类别"
+              },
+              {
+                whitespace: true,
+                message: "网址类别不能为空字符"
+              }
+            ]}
+          >
+            <Select>
+              {SITE_CATEGORIES.map(c => (
+                <Option key={c} value={c}>
+                  {c}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item {...tailFormItemLayout}>
             <Button onClick={onDrawerClose} style={{ marginRight: 12 }}>
@@ -140,4 +143,4 @@ const CreateBookmark = props => {
   );
 };
 
-export default Form.create({ name: "create_bookmark" })(CreateBookmark);
+export default CreateBookmark;
