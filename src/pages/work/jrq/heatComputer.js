@@ -1,5 +1,5 @@
 // ** 热量计算 ** //
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Form,
   InputNumber,
@@ -8,16 +8,16 @@ import {
   Row,
   Col,
   Card,
-  Slider
-} from "antd";
+  Slider,
+} from 'antd';
 import {
   computeHolesCount,
   computeThroatDiameter,
   computeWaterDiameter,
   computeCalorie,
   computeSteamCount,
-  computeSteamDiameter
-} from "../helper";
+  computeSteamDiameter,
+} from '../helper';
 
 const HeatComputer = props => {
   // 水管直径 单位 mm
@@ -45,7 +45,7 @@ const HeatComputer = props => {
       steamTemperature, // 蒸汽温度
       steamEnthalpy, // 蒸汽热焓值
       steamSpecificHeatCapacity, // 蒸汽比热容
-      steamVelocity // 蒸汽经济流速
+      steamVelocity, // 蒸汽经济流速
     } = values;
     // 计算水管的直径
     const waterDiameter = computeWaterDiameter(flow, waterVelocity);
@@ -78,26 +78,26 @@ const HeatComputer = props => {
 
   // 水的经济流速断点标记
   const waterVelocityMarks = {
-    1.0: "1.0 m/s",
-    1.5: "1.5 m/s",
-    2.0: "2.0 m/s",
-    2.5: "2.5 m/s"
+    1.0: '1.0 m/s',
+    1.5: '1.5 m/s',
+    2.0: '2.0 m/s',
+    2.5: '2.5 m/s',
   };
 
   // 蒸汽的经济流速断点标记
   const steamVelocityMarks = {
-    20: "20 m/s",
-    25: "25 m/s",
-    30: "30 m/s",
-    35: "35 m/s",
-    40: "40 m/s",
-    45: "45 m/s"
+    20: '20 m/s',
+    25: '25 m/s',
+    30: '30 m/s',
+    35: '35 m/s',
+    40: '40 m/s',
+    45: '45 m/s',
   };
 
   return (
     <div>
       <Row gutter={[32, 32]}>
-        <Col span={12}>
+        <Col span={14}>
           <Form
             onFinish={onFinish}
             initialValues={{
@@ -109,7 +109,7 @@ const HeatComputer = props => {
               steamTemperature: 165,
               steamEnthalpy: 2700,
               steamSpecificHeatCapacity: 0.4,
-              steamVelocity: 25
+              steamVelocity: 25,
             }}
             wrapperCol={{ span: 18 }}
             labelCol={{ span: 6 }}
@@ -117,7 +117,7 @@ const HeatComputer = props => {
             <Form.Item
               name="flow"
               label="水流量"
-              rules={[{ required: true, message: "请输入水流量" }]}
+              rules={[{ required: true, message: '请输入水流量' }]}
             >
               <InputNumber />
             </Form.Item>
@@ -132,42 +132,42 @@ const HeatComputer = props => {
             <Form.Item
               name="heatFrom"
               label="进水温度 °C"
-              rules={[{ required: true, message: "请输入进水温度" }]}
+              rules={[{ required: true, message: '请输入进水温度' }]}
             >
               <InputNumber />
             </Form.Item>
             <Form.Item
               name="heatTo"
               label="出水温度 °C"
-              rules={[{ required: true, message: "请输入出水温度" }]}
+              rules={[{ required: true, message: '请输入出水温度' }]}
             >
               <InputNumber />
             </Form.Item>
             <Form.Item
               name="steamPressure"
               label="蒸汽压力 MPa"
-              rules={[{ required: true, message: "请输入蒸汽压力" }]}
+              rules={[{ required: true, message: '请输入蒸汽压力' }]}
             >
               <InputNumber step={0.1} min={0.1} max={1.3} />
             </Form.Item>
             <Form.Item
               name="steamTemperature"
               label="蒸汽温度 °C"
-              rules={[{ required: true, message: "请输入蒸汽温度" }]}
+              rules={[{ required: true, message: '请输入蒸汽温度' }]}
             >
               <InputNumber min={100} max={300} />
             </Form.Item>
             <Form.Item
               name="steamEnthalpy"
               label="蒸汽热焓 Kj/Kg"
-              rules={[{ required: true, message: "请输入蒸汽热焓" }]}
+              rules={[{ required: true, message: '请输入蒸汽热焓' }]}
             >
               <InputNumber min={2700} max={2900} step={50} />
             </Form.Item>
             <Form.Item
               name="steamSpecificHeatCapacity"
               label="蒸汽比容 m³/Kg"
-              rules={[{ required: true, message: "请输入蒸汽比热容" }]}
+              rules={[{ required: true, message: '请输入蒸汽比热容' }]}
             >
               <InputNumber min={0.2} max={0.6} step={0.1} />
             </Form.Item>
@@ -181,14 +181,14 @@ const HeatComputer = props => {
             </Form.Item>
           </Form>
         </Col>
-        <Col span={12}>
+        <Col span={10}>
           <Row gutter={[8, 32]}>
             <Col span={12}>
               <Card>
                 <Statistic
                   title="蒸汽耗量"
                   value={steamCount}
-                  valueStyle={{ color: "#f50" }}
+                  valueStyle={{ color: '#f50' }}
                   suffix="kg/h"
                 />
               </Card>
@@ -210,7 +210,7 @@ const HeatComputer = props => {
                 <Statistic
                   title="吸收热量"
                   value={calorie}
-                  valueStyle={{ color: "#f50" }}
+                  valueStyle={{ color: '#f50' }}
                   suffix="KCal/h"
                 />
               </Card>

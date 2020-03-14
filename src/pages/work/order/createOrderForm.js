@@ -1,7 +1,7 @@
 // ** 新建订单页面 ** //
-import React, { useState } from "react";
-import moment from "moment";
-import { useHistory } from "react-router-dom";
+import React, { useState } from 'react';
+import moment from 'moment';
+import { useHistory } from 'react-router-dom';
 import {
   Row,
   Col,
@@ -12,28 +12,28 @@ import {
   Select,
   Radio,
   DatePicker,
-  message
-} from "antd";
-import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import * as ROUTES from "constants/routes";
-import firebase from "api/firebase";
-import useAuth from "hooks/useAuth";
-import styles from "./createOrderForm.module.css";
+  message,
+} from 'antd';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import * as ROUTES from 'constants/routes';
+import firebase from 'api/firebase';
+import useAuth from 'hooks/useAuth';
+import styles from './createOrderForm.module.css';
 
 const { RangePicker } = DatePicker;
 
 // 订单中产品的初始状态
 // 为什么需要这个？ 参考：https://github.com/ant-design/ant-design/issues/21816
 const initialProduct = {
-  model: "HQS",
-  material: "304",
+  model: 'HQS',
+  material: '304',
   quantity: 1,
   weight: 50,
   flow: 20,
   heatFrom: 5,
   heatTo: 65,
-  flangeStandard: "GB/T 9119-2000",
-  pressure: "1.0"
+  flangeStandard: 'GB/T 9119-2000',
+  pressure: '1.0',
 };
 const initialProducts = [];
 // 单个订单一般不超过 10 个产品
@@ -52,11 +52,11 @@ const CreateOrderForm = props => {
 
   const onFinish = values => {
     if (!auth) {
-      message.warn("您没有该权限", 1);
+      message.warn('您没有该权限', 1);
       return;
     }
 
-    console.log("提交的订单数据：", values);
+    console.log('提交的订单数据：', values);
     let { date, products } = values;
     // antd v4 改动：嵌套字段使用数组会有一点问题，如下：
     // 假如要选定 products 数组 第一个元素的 name 属性
@@ -66,27 +66,27 @@ const CreateOrderForm = props => {
     // 将 products 添加 length 属性，然后转化为数组
     products.length = Object.keys(products).length;
     products = Array.from(products);
-    console.log("products", products);
+    console.log('products', products);
     products.filter(product => product.name);
 
     // 下单日期
-    const orderAt = date[0].format("YYYY-MM-DD");
+    const orderAt = date[0].format('YYYY-MM-DD');
     // 到货日期
-    const arrivalAt = date[1].format("YYYY-MM-DD");
+    const arrivalAt = date[1].format('YYYY-MM-DD');
     // 提交到数据库的单个产品信息
     const order = {
       ...values,
       date: { orderAt, arrivalAt },
       nameplate: false,
       certificate: false,
-      products
+      products,
     };
-    console.log("order: ", order);
+    console.log('order: ', order);
     // api
     firebase
       .createOrder(order)
       .then(() => {
-        message.success("订单创建成功", 1);
+        message.success('订单创建成功', 1);
         history.push(ROUTES.WORK_ORDERS);
       })
       .catch(error => message.error(error.message));
@@ -95,11 +95,11 @@ const CreateOrderForm = props => {
   const formItemLayout = {
     labelCol: {
       offset: 2,
-      span: 6
+      span: 6,
     },
     wrapperCol: {
-      span: 12
-    }
+      span: 12,
+    },
   };
 
   return (
@@ -107,24 +107,10 @@ const CreateOrderForm = props => {
       {...formItemLayout}
       onFinish={onFinish}
       initialValues={{
-        date: [moment(), moment().add(7, "days")],
-        products: initialProducts
+        date: [moment(), moment().add(7, 'days')],
+        products: initialProducts,
       }}
     >
-      <Form.Item>
-        <Button.Group>
-          <Button
-            disabled={items.length <= 1}
-            icon={<MinusOutlined />}
-            onClick={removeItem}
-          >
-            删除产品
-          </Button>
-          <Button type="primary" icon={<PlusOutlined />} onClick={addItem}>
-            增加产品
-          </Button>
-        </Button.Group>
-      </Form.Item>
       <Form.Item
         name="consumer"
         label="销售客户"
@@ -132,12 +118,12 @@ const CreateOrderForm = props => {
         rules={[
           {
             required: true,
-            message: "请输入销售客户"
+            message: '请输入销售客户',
           },
           {
             whitespace: true,
-            message: "销售客户不能为空白字符"
-          }
+            message: '销售客户不能为空白字符',
+          },
         ]}
       >
         <Input autoFocus allowClear />
@@ -149,11 +135,11 @@ const CreateOrderForm = props => {
         rules={[
           {
             required: true,
-            message: "请输入货期"
-          }
+            message: '请输入货期',
+          },
         ]}
       >
-        <RangePicker style={{ width: "100%" }} />
+        <RangePicker style={{ width: '100%' }} />
       </Form.Item>
       <Form.Item noStyle>
         <Row gutter={10} className={styles.productRow}>
@@ -165,39 +151,36 @@ const CreateOrderForm = props => {
               push={index === 0 ? 8 : 0}
               className={styles.productCol}
             >
-              <Form.Item
-                name={["products", `${index}`, "model"]}
-                label="款式"
-              >
+              <Form.Item name={['products', `${index}`, 'model']} label="款式">
                 <Radio.Group defaultValue="HQS">
                   <Radio value="HQS">HQS</Radio>
                   <Radio value="HJ">HJ</Radio>
                 </Radio.Group>
               </Form.Item>
               <Form.Item
-                name={["products", `${index}`, "name"]}
+                name={['products', `${index}`, 'name']}
                 label="产品型号"
                 rules={[
                   {
                     required: true,
-                    message: "请输入产品型号"
+                    message: '请输入产品型号',
                   },
                   {
                     whitespace: true,
-                    message: "产品型号不能为空白字符"
-                  }
+                    message: '产品型号不能为空白字符',
+                  },
                 ]}
               >
                 <Input allowClear />
               </Form.Item>
               <Form.Item
-                name={["products", `${index}`, "material"]}
+                name={['products', `${index}`, 'material']}
                 label="材质"
                 rules={[
                   {
                     required: true,
-                    message: "请指定材质"
-                  }
+                    message: '请指定材质',
+                  },
                 ]}
               >
                 <Select defaultValue="304">
@@ -210,19 +193,19 @@ const CreateOrderForm = props => {
                 </Select>
               </Form.Item>
               <Form.Item
-                name={["products", `${index}`, "quantity"]}
+                name={['products', `${index}`, 'quantity']}
                 label="数量"
                 rules={[
                   {
                     required: true,
-                    message: "请输入产品数量"
-                  }
+                    message: '请输入产品数量',
+                  },
                 ]}
               >
                 <InputNumber min={1} max={99} defaultValue={1} />
               </Form.Item>
               <Form.Item
-                name={["products", `${index}`, "weight"]}
+                name={['products', `${index}`, 'weight']}
                 label="重量 kg"
               >
                 <Radio.Group defaultValue={50}>
@@ -233,25 +216,25 @@ const CreateOrderForm = props => {
                 </Radio.Group>
               </Form.Item>
               <Form.Item
-                name={["products", `${index}`, "flow"]}
+                name={['products', `${index}`, 'flow']}
                 label="流量 t/h"
               >
                 <InputNumber min={1} max={2000} step={10} defaultValue={20} />
               </Form.Item>
               <Form.Item
-                name={["products", `${index}`, "heatFrom"]}
+                name={['products', `${index}`, 'heatFrom']}
                 label="进水温度 °C"
               >
                 <InputNumber min={1} max={160} defaultValue={5} />
               </Form.Item>
               <Form.Item
-                name={["products", `${index}`, "heatTo"]}
+                name={['products', `${index}`, 'heatTo']}
                 label="出水温度 °C"
               >
                 <InputNumber min={1} max={200} defaultValue={65} />
               </Form.Item>
               <Form.Item
-                name={["products", `${index}`, "flangeStandard"]}
+                name={['products', `${index}`, 'flangeStandard']}
                 label="法兰标准"
               >
                 <Select defaultValue="GB/T 9119-2000">
@@ -269,6 +252,12 @@ const CreateOrderForm = props => {
                   </Select.Option>
                 </Select>
               </Form.Item>
+              <Form.Item
+                name={['products', `${index}`, 'pressure']}
+                label="压力 MPa"
+              >
+                1.0
+              </Form.Item>
             </Col>
           ))}
         </Row>
@@ -278,10 +267,24 @@ const CreateOrderForm = props => {
           size="large"
           type="primary"
           htmlType="submit"
-          style={{ width: "100%" }}
+          style={{ width: '100%' }}
         >
           新建订单
         </Button>
+      </Form.Item>
+      <Form.Item>
+        <Button.Group>
+          <Button
+            disabled={items.length <= 1}
+            icon={<MinusOutlined />}
+            onClick={removeItem}
+          >
+            删除产品
+          </Button>
+          <Button type="primary" icon={<PlusOutlined />} onClick={addItem}>
+            增加产品
+          </Button>
+        </Button.Group>
       </Form.Item>
     </Form>
   );

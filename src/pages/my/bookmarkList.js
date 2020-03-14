@@ -1,8 +1,9 @@
 // ** 书签展示列表，展示型组件 ** //
-import React from "react";
-import { Card, Row, Col, Icon, Anchor } from "antd";
-import { SITE_CATEGORIES, PALETTE } from "constants/index";
-import styles from "./bookmark.module.css";
+import React from 'react';
+import { Card, Row, Col, Anchor } from 'antd';
+import { TagOutlined } from '@ant-design/icons';
+import { SITE_CATEGORIES, PALETTE } from 'constants/index';
+import styles from './bookmark.module.css';
 
 const { Link } = Anchor;
 
@@ -30,11 +31,11 @@ const BookmarkList = ({ sites }) => {
             return (
               <div
                 key={category}
-                id={category.replace(" ", "-")}
+                id={category.replace(' ', '-')}
                 className={styles.category}
               >
                 <p>
-                  <Icon type="tag" /> {category}
+                  <TagOutlined /> {category}
                 </p>
                 <Row gutter={[16, 16]} type="flex">
                   {groupSites.map(site => (
@@ -62,7 +63,7 @@ const BookmarkList = ({ sites }) => {
         <Col span={3}>
           <Anchor>
             {SITE_CATEGORIES.map(c => (
-              <Link key={c} href={`#${c.replace(" ", "-")}`} title={c} />
+              <Link key={c} href={`#${c.replace(' ', '-')}`} title={c} />
             ))}
           </Anchor>
         </Col>

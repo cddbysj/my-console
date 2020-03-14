@@ -1,8 +1,9 @@
 // ** 合格证页面，由数据直接生成可打印的合格证 ** //
-import React from "react";
-import { Button, Tag } from "antd";
-import { useLocation } from "react-router-dom";
-import styles from "./certificate.module.css";
+import React from 'react';
+import { Button, Tag } from 'antd';
+import { useLocation } from 'react-router-dom';
+import styles from './certificate.module.css';
+import { PrinterOutlined } from '@ant-design/icons';
 
 const CertificatePage = () => {
   const { products, arrivalAt } = useLocation().state;
@@ -14,7 +15,7 @@ const CertificatePage = () => {
   return (
     <div>
       <div className={styles.noPrint}>
-        <Button icon="printer" type="primary" onClick={onPrint}>
+        <Button icon={<PrinterOutlined />} type="primary" onClick={onPrint}>
           打印
         </Button>
       </div>
