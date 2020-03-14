@@ -1,7 +1,7 @@
 // ** 合格证统一管理页面 ** //
 
-import React, { useState, useEffect } from "react";
-import moment from "moment";
+import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 import {
   Button,
   Form,
@@ -16,8 +16,8 @@ import {
   Radio,
   InputNumber,
   DatePicker,
-  message
-} from "antd";
+  message,
+} from 'antd';
 import {
   PlusCircleTwoTone,
   EditTwoTone,
@@ -25,31 +25,31 @@ import {
   PrinterOutlined,
   DeleteOutlined,
   BulbTwoTone,
-  MinusOutlined
-} from "@ant-design/icons";
-import firebase from "api/firebase";
-import useCertificates from "hooks/useCertificates";
-import styles from "./certificate.module.css";
-import classNames from "classnames/bind";
+  MinusOutlined,
+} from '@ant-design/icons';
+import firebase from 'api/firebase';
+import useCertificates from 'hooks/useCertificates';
+import styles from './certificate.module.css';
+import classNames from 'classnames/bind';
 
 let cx = classNames.bind(styles);
 
 const { TabPane } = Tabs;
 
 // 以中文格式显示时间
-const showTimeInCN = date => new Date(date).toLocaleString("zh-Hans-CN");
+const showTimeInCN = date => new Date(date).toLocaleString('zh-Hans-CN');
 
 const CertificatesManagePage = props => {
-  const [filter, setFilter] = useState("SHOW_ACTIVE");
+  const [filter, setFilter] = useState('SHOW_ACTIVE');
   const certificates = useCertificates(filter);
 
   // 合格证卡片队列，一次最多打印 9 个。
-  const initialCardQueue = JSON.parse(localStorage.getItem("cardQueue")) || [];
+  const initialCardQueue = JSON.parse(localStorage.getItem('cardQueue')) || [];
   const [cardQueue, setCardQueue] = useState(initialCardQueue);
 
   useEffect(() => {
-    localStorage.setItem("cardQueue", JSON.stringify(cardQueue));
-    return () => localStorage.removeItem("cardQueue");
+    localStorage.setItem('cardQueue', JSON.stringify(cardQueue));
+    return () => localStorage.removeItem('cardQueue');
   });
 
   // 调用 Web API 启用打印机
@@ -65,21 +65,19 @@ const CertificatesManagePage = props => {
   const addToCardQueue = async card => {
     await firebase.finishCertificatesPrint(card.orderId, true);
     setCardQueue(prev => [card, ...prev]);
-    message.success("已添加到打印列表", 0.5);
+    message.success('已添加到打印列表', 0.5);
   };
 
   const fillCard = values => {
-    console.log("received values: ", values);
     const { arrivalAt } = values;
     setCardQueue(prev => [
-      { ...values, arrivalAt: arrivalAt.format("YYYY-MM") },
-      ...prev
+      { ...values, arrivalAt: arrivalAt.format('YYYY-MM') },
+      ...prev,
     ]);
-    message.success("添加合格证成功", 0.5);
+    message.success('添加合格证成功', 0.5);
   };
 
   const removeCard = cardName => {
-    console.log("remove card");
     setCardQueue(prev => prev.filter(card => card.name !== cardName));
   };
 
@@ -91,7 +89,7 @@ const CertificatesManagePage = props => {
   return (
     <Tabs defaultActiveKey="plan">
       <TabPane tab="计划" key="plan">
-        <div className={cx("noPrint", "planArea")}>
+        <div className={cx('noPrint', 'planArea')}>
           <div className={styles.filter}>
             <Radio.Group onChange={setVisibilityFilter} defaultValue="未打印">
               <Radio.Button value="SHOW_ACTIVE">未打印</Radio.Button>
@@ -122,7 +120,7 @@ const CertificatesManagePage = props => {
                       </Tooltip>,
                       <Tooltip title="未完成的功能">
                         <EllipsisOutlined key="ellipsis" />
-                      </Tooltip>
+                      </Tooltip>,
                     ]}
                   >
                     <p>{item.name}</p>
@@ -148,12 +146,16 @@ const CertificatesManagePage = props => {
         </div>
       </TabPane>
       <TabPane tab="预览" key="preview">
-        <div className={cx("noPrint", "cardActions")}>
+        <div className={cx('noPrint', 'cardActions')}>
           <Button.Group>
             <Button icon={<PrinterOutlined />} type="primary" onClick={onPrint}>
               打印
             </Button>
-            <Button icon={<DeleteOutlined />} type="danger" onClick={onClearAll}>
+            <Button
+              icon={<DeleteOutlined />}
+              type="danger"
+              onClick={onClearAll}
+            >
               清空
             </Button>
           </Button.Group>
@@ -181,9 +183,9 @@ const CertificatesManagePage = props => {
                         />
                       </p>
                       <p>
-                        {card.model === "HQS"
+                        {card.model === 'HQS'
                           ? card.name.slice(0, 3)
-                          : card.model}{" "}
+                          : card.model}{' '}
                         Heater
                       </p>
                       <p>检验合格证明书</p>
@@ -219,10 +221,10 @@ const CertificatesManagePage = props => {
           onFinish={fillCard}
           layout="inline"
           initialValues={{
-            name: "HJ-50C",
+            name: 'HJ-50C',
             quantity: 1,
-            model: "HJ",
-            arrivalAt: moment()
+            model: 'HJ',
+            arrivalAt: moment(),
           }}
         >
           <Form.Item
@@ -231,8 +233,8 @@ const CertificatesManagePage = props => {
             rules={[
               {
                 required: true,
-                message: "请输入产品名称"
-              }
+                message: '请输入产品名称',
+              },
             ]}
           >
             <Input allowClear autoFocus />
@@ -243,8 +245,8 @@ const CertificatesManagePage = props => {
             rules={[
               {
                 required: true,
-                message: "请指定数量"
-              }
+                message: '请指定数量',
+              },
             ]}
           >
             <InputNumber min={1} max={9} />
@@ -252,14 +254,14 @@ const CertificatesManagePage = props => {
           <Form.Item
             name="model"
             label="结构形式"
-            rules={[{ required: true, message: "请指定结构" }]}
+            rules={[{ required: true, message: '请指定结构' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             name="arrivalAt"
             label="检验日期"
-            rules={[{ required: true, message: "请指定检验日期" }]}
+            rules={[{ required: true, message: '请指定检验日期' }]}
           >
             <DatePicker />
           </Form.Item>

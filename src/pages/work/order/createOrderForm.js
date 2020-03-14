@@ -56,7 +56,6 @@ const CreateOrderForm = props => {
       return;
     }
 
-    console.log('提交的订单数据：', values);
     let { date, products } = values;
     // antd v4 改动：嵌套字段使用数组会有一点问题，如下：
     // 假如要选定 products 数组 第一个元素的 name 属性
@@ -66,7 +65,6 @@ const CreateOrderForm = props => {
     // 将 products 添加 length 属性，然后转化为数组
     products.length = Object.keys(products).length;
     products = Array.from(products);
-    console.log('products', products);
     products.filter(product => product.name);
 
     // 下单日期
@@ -81,7 +79,6 @@ const CreateOrderForm = props => {
       certificate: false,
       products,
     };
-    console.log('order: ', order);
     // api
     firebase
       .createOrder(order)

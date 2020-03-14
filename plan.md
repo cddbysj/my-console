@@ -26,3 +26,9 @@
 ### 代码分割
 
 基于路由的懒加载。由于我将应用程序部署在 GitHub Pages，其服务器是支持 HTTP 2.0 的，使用一个 TPC 连接即可并行发送多个请求和响应。因此，可以考虑将初次加载页面时用不到的部分组件懒加载。
+
+## 初次性能提升
+
+- `main.[hash].chunk.js` 这是我的应用程序代码，大小为 23.8kb
+- `[number].[hash].chunk.js` 代码分割包，一共 14 个包，共计 1750kb
+- `runtime-main.[hash].chunk.js` 4kb

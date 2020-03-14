@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Button, Drawer, Form, Input, message, Select } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { SITE_CATEGORIES } from "constants/index";
+import React, { useState } from 'react';
+import { Button, Drawer, Form, Input, message, Select } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { SITE_CATEGORIES } from 'constants/index';
 
 const { Option } = Select;
 
@@ -13,26 +13,25 @@ const CreateBookmark = ({ addSite }) => {
   const onDrawerClose = () => setVisible(false);
 
   const onFinish = async values => {
-    console.log("received values: ", values);
     await addSite({ ...values, createAt: Date.now() });
     onDrawerClose();
-    message.success("添加成功", 0.5);
+    message.success('添加成功', 0.5);
   };
 
   const formItemLayout = {
     labelCol: {
-      span: 8
+      span: 8,
     },
     wrapperCol: {
-      span: 16
-    }
+      span: 16,
+    },
   };
 
   const tailFormItemLayout = {
     wrapperCol: {
       span: 16,
-      offset: 8
-    }
+      offset: 8,
+    },
   };
 
   return (
@@ -56,7 +55,7 @@ const CreateBookmark = ({ addSite }) => {
           onFinish={onFinish}
           {...formItemLayout}
           initialValues={{
-            category: SITE_CATEGORIES[0]
+            category: SITE_CATEGORIES[0],
           }}
         >
           <Form.Item
@@ -65,12 +64,12 @@ const CreateBookmark = ({ addSite }) => {
             rules={[
               {
                 required: true,
-                message: "请输入网址标题"
+                message: '请输入网址标题',
               },
               {
                 whitespace: true,
-                message: "网址标题不能为空字符"
-              }
+                message: '网址标题不能为空字符',
+              },
             ]}
           >
             <Input autoFocus />
@@ -81,12 +80,12 @@ const CreateBookmark = ({ addSite }) => {
             rules={[
               {
                 required: true,
-                message: "请输入描述信息"
+                message: '请输入描述信息',
               },
               {
                 whitespace: true,
-                message: "描述信息不能为空字符"
-              }
+                message: '描述信息不能为空字符',
+              },
             ]}
           >
             <Input placeholder="尽可能简短" />
@@ -97,12 +96,12 @@ const CreateBookmark = ({ addSite }) => {
             rules={[
               {
                 required: true,
-                message: "请输入链接"
+                message: '请输入链接',
               },
               {
                 whitespace: true,
-                message: "链接不能为空字符"
-              }
+                message: '链接不能为空字符',
+              },
             ]}
           >
             <Input />
@@ -113,12 +112,12 @@ const CreateBookmark = ({ addSite }) => {
             rules={[
               {
                 required: true,
-                message: "请输入网址类别"
+                message: '请输入网址类别',
               },
               {
                 whitespace: true,
-                message: "网址类别不能为空字符"
-              }
+                message: '网址类别不能为空字符',
+              },
             ]}
           >
             <Select>
