@@ -41,6 +41,16 @@
   background-color: #ccffff;
   color: #000080;
 }
+
+.hiddenButton {
+  color: #ccffff;
+  background-color: #ccffff;
+}
+
+.hiddenButton:hover {
+  color: #000080;
+}
+
 .cardHeader {
   padding: 4mm;
   font-size: large;
@@ -63,7 +73,6 @@
 
 .cardFooter .seal {
   text-align: center;
-  margin: 2mm 0;
   font-size: small;
 }
 

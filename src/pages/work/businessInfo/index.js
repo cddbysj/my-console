@@ -1,6 +1,6 @@
 // ** 所有商务信息展示页面 ** //
 import React from "react";
-import { Row, Col, Descriptions, Table } from "antd";
+import { Row, Col, Descriptions, Table, Typography } from "antd";
 
 const { Column } = Table;
 
@@ -52,6 +52,31 @@ const staffContactInfo = [
     job: "财务专员",
     mobileNumber: "15084987438",
     QQ: "531916050"
+  }
+];
+
+// 身份证信息
+const ids = [
+  {
+    name: "金艳萍",
+    ethnicity: "汉", // 民族
+    birth: "1969-2-14",
+    address: "长沙市雨花区涂家冲一组1栋802房",
+    number: "430122196902144021"
+  },
+  {
+    name: "黄苍松",
+    ethnicity: "汉",
+    birth: "1982-1-1",
+    address: "湖南省安化县大福镇大尧村第九村民组99号",
+    number: "430923198201012033"
+  },
+  {
+    name: "范锡明",
+    ethnicity: "汉",
+    birth: "1966-9-23",
+    address: "长沙市雨花区涂家冲一组1栋802房",
+    number: "430103196609231135"
   }
 ];
 
@@ -178,9 +203,27 @@ const BusinessInfo = props => {
         </Col>
       </Row>
       <Row gutter={[64, 64]}>
+        <Col>
+          <Table
+            title={() => <Typography.Title level={4}>身份证</Typography.Title>}
+            dataSource={ids}
+            rowKey={record => record.number}
+            pagination={false}
+          >
+            <Column title="姓名" dataIndex="name" />
+            <Column title="民族" dataIndex="ethnicity" />
+            <Column title="出生" dataIndex="birth" />
+            <Column title="住址" dataIndex="address" />
+            <Column title="号码" dataIndex="number" />
+          </Table>
+        </Col>
+      </Row>
+      <Row gutter={[64, 64]}>
         <Col span={24}>
           <Table
-            title={() => "客服人员联系方式"}
+            title={() => (
+              <Typography.Title level={4}>客服人员联系方式</Typography.Title>
+            )}
             dataSource={staffContactInfo}
             rowKey={record => record.QQ}
             pagination={false}
