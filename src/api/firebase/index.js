@@ -50,6 +50,14 @@ class Firebase {
   // 新建订单
   createOrder = async order => await this.db.collection("orders").add(order);
 
+  // 编辑订单
+  editOrder = async (id, updatedData) => {
+    await this.db
+      .collection("orders")
+      .doc(id)
+      .update(updatedData);
+  };
+
   // 删除订单
   removeOrder = async id => {
     await this.db

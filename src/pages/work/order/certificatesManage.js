@@ -198,7 +198,7 @@ const CertificatesManagePage = props => {
                       <p>
                         检验员：<Tag color="red">0306</Tag>
                       </p>
-                      <p>检验日期：{card.arrivalAt}</p>
+                      <p>检验日期：{card.arrivalAt.slice(0, 7)}</p>
                       <p>本产品经检验合格，符合标准，准予出厂。</p>
                     </section>
                     <section className={styles.cardFooter}>

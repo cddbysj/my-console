@@ -20,14 +20,12 @@ import {
 } from "@ant-design/icons";
 
 import * as ROUTES from "constants/routes";
-import useAuth from "hooks/useAuth";
 
 const { Column } = Table;
 const { Text } = Typography;
 
 const OrderTable = props => {
   const history = useHistory();
-  const auth = useAuth();
 
   const {
     orders,
@@ -40,17 +38,18 @@ const OrderTable = props => {
 
   const goCreateOrder = () => history.push(ROUTES.CREATE_ORDER);
 
+  const goEditOrder = record =>
+    history.push(ROUTES.CREATE_ORDER, { ...record, flag: "EDIT_ORDER" });
+
+  const goCopyOrder = record =>
+    history.push(ROUTES.CREATE_ORDER, { ...record, flag: "COPY_ORDER" });
+
   const handleCertificateChange = async (record, checked) => {
     const {
       id,
       products,
       date: { arrivalAt }
     } = record;
-
-    if (!auth) {
-      message.warn("您没有该权限");
-      return;
-    }
 
     await onToggleCertificatePrint(id, checked);
     // firestore 对于元素类型为对象的数组支持比较差
@@ -77,19 +76,10 @@ const OrderTable = props => {
   };
 
   const handleToggleNameplatePrint = async (id, checked) => {
-    if (!auth) {
-      message.warn("您没有该权限");
-      return;
-    }
     await onToggleNameplatePrint(id, checked);
   };
 
   const handleRemoveOrder = async orderId => {
-    if (!auth) {
-      message.warn("您没有该权限");
-      return;
-    }
-
     try {
       await onRemoveOrder(orderId);
       message.success("删除订单成功", 1);
@@ -205,9 +195,17 @@ const OrderTable = props => {
                 onClick={() => handleRemoveOrder(record.id)}
               />
               <Divider type="vertical" />
-              <Button type="link" icon={<EditOutlined />} />
+              <Button
+                type="link"
+                icon={<EditOutlined />}
+                onClick={() => goEditOrder(record)}
+              />
               <Divider type="vertical" />
-              <Button type="link" icon={<CopyOutlined />} />
+              <Button
+                type="link"
+                icon={<CopyOutlined />}
+                onClick={() => goCopyOrder(record)}
+              />
             </span>
           )}
         />

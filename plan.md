@@ -32,3 +32,7 @@
 - `main.[hash].chunk.js` 这是我的应用程序代码，大小为 23.8kb
 - `[number].[hash].chunk.js` 代码分割包，一共 14 个包，共计 1750kb
 - `runtime-main.[hash].chunk.js` 4kb
+
+## Todo
+
+- 重新设计 Firebase 数据库内数据的结构。避免出现元素为对象类型的数组，比如：`[{id: 1, text: 'Hi'}, {id: 2, text: 'Bye}]`
