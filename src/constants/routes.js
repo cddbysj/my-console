@@ -26,6 +26,9 @@ export const WORK_BUSINESS_INFO = "/business";
 // 个人事务
 export const MY_PAGE = "/my";
 
+// 备忘录
+export const MEMO = "/memo";
+
 // QQ 邮箱
 export const QQ_MAIL =
   "https://mail.qq.com/cgi-bin/frame_html?sid=2tq_5c2Dt8fOMkEf&r=ba4f18e27a212e38f7e5be5b900066ce";

@@ -7,7 +7,8 @@ import {
   FileImageOutlined,
   FileOutlined,
   ContactsOutlined,
-  ProjectOutlined
+  ProjectOutlined,
+  BookOutlined,
 } from "@ant-design/icons";
 import useAuth from "./hooks/useAuth";
 
@@ -16,6 +17,7 @@ import WorkStep from "./components/workStep";
 import CreateOrderForm from "./pages/work/order/createOrderForm";
 import WorkPage from "./pages/work/order";
 import CertificatePage from "./pages/work/order/certificate";
+import MemoPage from "./pages/work/memo";
 import * as ROUTES from "constants/routes";
 
 const { Header, Content, Sider } = Layout;
@@ -44,7 +46,7 @@ function App() {
               overflow: "auto",
               height: "100vh",
               position: "fixed",
-              left: 0
+              left: 0,
             }}
           >
             <Menu
@@ -87,6 +89,11 @@ function App() {
                   <ProjectOutlined /> 个人事务
                 </Link>
               </Menu.Item>
+              <Menu.Item key="memo">
+                <Link to={ROUTES.MEMO}>
+                  <BookOutlined /> 备忘录
+                </Link>
+              </Menu.Item>
             </Menu>
           </Sider>
         ) : null}
@@ -104,7 +111,7 @@ function App() {
                       textAlign: "center",
                       fontSize: 32,
                       margin: "20px 0",
-                      padding: "30vh 0"
+                      padding: "30vh 0",
                     }}
                   >
                     <Spin />
@@ -153,6 +160,9 @@ function App() {
                     />
                     <Route path={ROUTES.WORK_BUSINESS_INFO} exact>
                       <BusinessInfo />
+                    </Route>
+                    <Route path={ROUTES.MEMO} exact>
+                      <MemoPage />
                     </Route>
                     <Route path={ROUTES.HOME_PAGE} exact>
                       <WorkPage />

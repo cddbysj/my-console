@@ -12,7 +12,7 @@ const firebaseConfig = {
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_APP_ID,
-  measurementId: process.env.REACT_APP_MEASUREMENT_ID
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -36,55 +36,40 @@ class Firebase {
   signOut = () => this.auth.signOut();
 
   onAuthStateChanged = (next, fallback) =>
-    this.auth.onAuthStateChanged(user => (user ? next(user) : fallback()));
+    this.auth.onAuthStateChanged((user) => (user ? next(user) : fallback()));
 
   // ** Orders API ** //
 
   // 获取订单列表
   orders = () =>
-    this.db
-      .collection("orders")
-      .orderBy("date.orderAt", "desc")
-      .limit(100);
+    this.db.collection("orders").orderBy("date.orderAt", "desc").limit(100);
 
   // 新建订单
-  createOrder = async order => await this.db.collection("orders").add(order);
+  createOrder = async (order) => await this.db.collection("orders").add(order);
 
   // 编辑订单
   editOrder = async (id, updatedData) => {
-    await this.db
-      .collection("orders")
-      .doc(id)
-      .update(updatedData);
+    await this.db.collection("orders").doc(id).update(updatedData);
   };
 
   // 删除订单
-  removeOrder = async id => {
-    await this.db
-      .collection("orders")
-      .doc(id)
-      .delete();
+  removeOrder = async (id) => {
+    await this.db.collection("orders").doc(id).delete();
     // 同时也要删除掉对应的合格证数据
     await this.removeCertificates(id);
   };
 
   // 铭牌打印切换
   toggleNameplatePrint = async (id, checked) =>
-    await this.db
-      .collection("orders")
-      .doc(id)
-      .update({
-        nameplate: checked
-      });
+    await this.db.collection("orders").doc(id).update({
+      nameplate: checked,
+    });
 
   // 合格证打印切换
   toggleCertificatePrint = async (id, checked) =>
-    await this.db
-      .collection("orders")
-      .doc(id)
-      .update({
-        certificate: checked
-      });
+    await this.db.collection("orders").doc(id).update({
+      certificate: checked,
+    });
 
   // 获取未打印的合格证
   certificates = (filter = "SHOW_ACTIVE") => {
@@ -110,17 +95,11 @@ class Firebase {
 
   // 新建当前订单的产品合格证
   createCertificates = async (id, certificateInfo) =>
-    await this.db
-      .collection("certificates")
-      .doc(id)
-      .set(certificateInfo);
+    await this.db.collection("certificates").doc(id).set(certificateInfo);
 
   // 移除当前订单的产品合格证
-  removeCertificates = async id =>
-    await this.db
-      .collection("certificates")
-      .doc(id)
-      .delete();
+  removeCertificates = async (id) =>
+    await this.db.collection("certificates").doc(id).delete();
   // 完成某个订单的产品合格证打印
   finishCertificatesPrint = async (id, checked) =>
     await this.db
@@ -134,7 +113,22 @@ class Firebase {
   sites = () => this.db.collection("sites");
 
   // 新建一个网址条目
-  createSite = async site => await this.db.collection("sites").add(site);
+  createSite = async (site) => await this.db.collection("sites").add(site);
+
+  // ** Sites API ** //
+
+  // 获取所有备忘录
+  getMemo = () => this.db.collection("memo");
+
+  // 新建一条备忘录
+  createMemo = async (memo) => await this.db.collection("memo").add(memo);
+
+  // 更新备忘录
+  updateMemo = async (memo) =>
+    await this.db.collection("memo").doc(memo.id).update(memo);
+
+  // 删除备忘录
+  removeMemo = async (id) => await this.db.collection("memo").doc(id).delete();
 }
 
 export default new Firebase();

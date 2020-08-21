@@ -31,7 +31,7 @@ const initialProduct = {
   flow: 20,
   heatFrom: 5,
   heatTo: 65,
-  flangeStandard: "GB/T 9119-2000",
+  flangeStandard: "HG/T 20592-2009",
   pressure: "1.0"
 };
 const initialProducts = [];
@@ -261,7 +261,7 @@ const CreateOrderForm = props => {
                 name={["products", `${index}`, "flangeStandard"]}
                 label="法兰标准"
               >
-                <Select defaultValue="GB/T 9119-2000">
+                <Select defaultValue="HG/T 20592-2009">
                   <Select.Option value="GB/T 9119-2000">
                     GB/T 9119-2000
                   </Select.Option>

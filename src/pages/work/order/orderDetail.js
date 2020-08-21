@@ -83,7 +83,7 @@ const OrderDetailPage = () => {
     // 合同内单类别产品信息
     const contractItemText =
       model === 'HQS'
-        ? `法兰标准：${flangeStandard}。材质 ${material}，进水侧口径 ${dnInlet}，出水侧口径 ${dnOutlet}，蒸汽侧口径 ${dnSteam}，喉径 ${throatDiameter}mm，斜孔数 ${holesCount}，斜孔直径 3.5mm，角度与水平线成 30℃。`
+        ? `法兰标准：${flangeStandard}。材质 ${material}，进水侧口径 ${dnInlet}，出水侧口径 ${dnOutlet}，蒸汽侧口径 ${dnSteam}，喉径 ${throatDiameter}mm，斜孔数 ${holesCount}，斜孔直径 3.5mm，角度与轴线成 30℃。`
         : `法兰标准：${flangeStandard}。材质 ${material}，口径 ${dn}`;
 
     return {
