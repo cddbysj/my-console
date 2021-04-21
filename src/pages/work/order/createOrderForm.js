@@ -12,7 +12,7 @@ import {
   Select,
   Radio,
   DatePicker,
-  message
+  message,
 } from "antd";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import * as ROUTES from "constants/routes";
@@ -32,7 +32,7 @@ const initialProduct = {
   heatFrom: 5,
   heatTo: 65,
   flangeStandard: "HG/T 20592-2009",
-  pressure: "1.0"
+  pressure: "1.0",
 };
 const initialProducts = [];
 // 单个订单一般不超过 10 个产品
@@ -40,7 +40,7 @@ for (let index = 0; index < 10; index++) {
   initialProducts.push(initialProduct);
 }
 
-const CreateOrderForm = props => {
+const CreateOrderForm = (props) => {
   const history = useHistory();
   // 根据 flag 的值判断订单状态：
   // EDIT_ORDER 编辑订单
@@ -52,12 +52,12 @@ const CreateOrderForm = props => {
   // 用于动态增删产品
   const [items, setItems] = useState([0]);
 
-  const addItem = () => setItems(prev => [...prev, 0]);
-  const removeItem = () => setItems(prev => prev.slice(0, prev.length - 1));
+  const addItem = () => setItems((prev) => [...prev, 0]);
+  const removeItem = () => setItems((prev) => prev.slice(0, prev.length - 1));
 
   let submitButtonText = "新建订单";
 
-  const onFinish = values => {
+  const onFinish = (values) => {
     let { date, products } = values;
     // antd v4 改动：嵌套字段使用数组会有一点问题，如下：
     // 假如要选定 products 数组 第一个元素的 name 属性
@@ -67,7 +67,7 @@ const CreateOrderForm = props => {
     // 将 products 添加 length 属性，然后转化为数组
     products.length = Object.keys(products).length;
     products = Array.from(products);
-    products.filter(product => product.name);
+    products.filter((product) => product.name);
 
     // 下单日期
     const orderAt = date[0].format("YYYY-MM-DD");
@@ -79,7 +79,7 @@ const CreateOrderForm = props => {
       date: { orderAt, arrivalAt },
       nameplate: false,
       certificate: false,
-      products
+      products,
     };
     // api
     switch (flag) {
@@ -90,7 +90,7 @@ const CreateOrderForm = props => {
             message.success("订单更新成功", 1);
             history.push(ROUTES.WORK_ORDERS);
           })
-          .catch(error => message.error(error.message));
+          .catch((error) => message.error(error.message));
         submitButtonText = "更新订单";
         break;
       case "COPY_ORDER":
@@ -100,7 +100,7 @@ const CreateOrderForm = props => {
             message.success("订单复制成功", 1);
             history.push(ROUTES.WORK_ORDERS);
           })
-          .catch(error => message.error(error.message));
+          .catch((error) => message.error(error.message));
         submitButtonText = "复制订单";
         break;
       default:
@@ -110,7 +110,7 @@ const CreateOrderForm = props => {
             message.success("订单创建成功", 1);
             history.push(ROUTES.WORK_ORDERS);
           })
-          .catch(error => message.error(error.message));
+          .catch((error) => message.error(error.message));
         break;
     }
   };
@@ -118,11 +118,11 @@ const CreateOrderForm = props => {
   const formItemLayout = {
     labelCol: {
       offset: 2,
-      span: 6
+      span: 6,
     },
     wrapperCol: {
-      span: 12
-    }
+      span: 12,
+    },
   };
 
   return (
@@ -132,7 +132,7 @@ const CreateOrderForm = props => {
       initialValues={{
         consumer: consumer || "",
         date: date || [moment(), moment().add(7, "days")],
-        products: products || initialProducts
+        products: products || initialProducts,
       }}
     >
       <Form.Item
@@ -142,12 +142,12 @@ const CreateOrderForm = props => {
         rules={[
           {
             required: true,
-            message: "请输入销售客户"
+            message: "请输入销售客户",
           },
           {
             whitespace: true,
-            message: "销售客户不能为空白字符"
-          }
+            message: "销售客户不能为空白字符",
+          },
         ]}
       >
         <Input autoFocus allowClear />
@@ -159,8 +159,8 @@ const CreateOrderForm = props => {
         rules={[
           {
             required: true,
-            message: "请输入货期"
-          }
+            message: "请输入货期",
+          },
         ]}
       >
         <RangePicker style={{ width: "100%" }} />
@@ -187,12 +187,12 @@ const CreateOrderForm = props => {
                 rules={[
                   {
                     required: true,
-                    message: "请输入产品型号"
+                    message: "请输入产品型号",
                   },
                   {
                     whitespace: true,
-                    message: "产品型号不能为空白字符"
-                  }
+                    message: "产品型号不能为空白字符",
+                  },
                 ]}
               >
                 <Input allowClear />
@@ -203,8 +203,8 @@ const CreateOrderForm = props => {
                 rules={[
                   {
                     required: true,
-                    message: "请指定材质"
-                  }
+                    message: "请指定材质",
+                  },
                 ]}
               >
                 <Select defaultValue="304">
@@ -214,6 +214,7 @@ const CreateOrderForm = props => {
                     外壳碳钢 芯体304
                   </Select.Option>
                   <Select.Option value="316L">316L</Select.Option>
+                  <Select.Option value="2205">2205</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item
@@ -222,8 +223,8 @@ const CreateOrderForm = props => {
                 rules={[
                   {
                     required: true,
-                    message: "请输入产品数量"
-                  }
+                    message: "请输入产品数量",
+                  },
                 ]}
               >
                 <InputNumber min={1} max={99} defaultValue={1} />
@@ -232,12 +233,14 @@ const CreateOrderForm = props => {
                 name={["products", `${index}`, "weight"]}
                 label="重量 kg"
               >
-                <Radio.Group defaultValue={50}>
-                  <Radio.Button value={8}>{8}</Radio.Button>
-                  <Radio.Button value={15}>{15}</Radio.Button>
-                  <Radio.Button value={50}>{50}</Radio.Button>
-                  <Radio.Button value={200}>{200}</Radio.Button>
-                </Radio.Group>
+                <Select defaultValue={50}>
+                  <Select.Option value={8}>{8}</Select.Option>
+                  <Select.Option value={15}>{15}</Select.Option>
+                  <Select.Option value={50}>{50}</Select.Option>
+                  <Select.Option value={200}>{200}</Select.Option>
+                  <Select.Option value={240}>{240}</Select.Option>
+                  <Select.Option value={300}>{300}</Select.Option>
+                </Select>
               </Form.Item>
               <Form.Item
                 name={["products", `${index}`, "flow"]}
